@@ -21,26 +21,43 @@ h2 {
   height: 200px;
 }
 .edit_custom_fields .col2 {
-  width: 207px;
+  width: 180px;
   padding-left: 3px;
 }
 .edit_custom_fields .header_row .col2 {
-  width: 210px;
+  width: 183px;
   padding-left: 0px;
 }
 .edit_custom_fields .col3 {
-  width: 230px;
+  width: 150px;
+  color: #999999;
 }
-.edit_custom_fields .col3 select {
-  width: 228px;
+.edit_custom_fields .rows .col3 {
+  width: 148px;
+  padding-left: 2px;
 }
 .edit_custom_fields .col4 {
-  width: 195px;
+  width: 140px;
+}
+.edit_custom_fields .col4 select {
+  width: 138px;
+}
+.edit_custom_fields .col5 a:link, .edit_custom_fields .col5 a:visited, .edit_custom_fields .col6 a:link, .edit_custom_fields .col6 a:visited {
+	display: block;
+	text-decoration: none;
+}
+.edit_custom_fields .col5 {
+  width: 80px;
   text-align: center;
 }
 .edit_custom_fields .col6 {
-  width: 18px;
+  width: 80px;
+  text-align: center;
 }
+.edit_custom_fields .col8 {
+	width:18px;
+}
+
 .full_width {
   width: 535px;
 }
@@ -162,3 +179,28 @@ table.var_list_table {
 #grouped_characteristics_table select.field_type_settings_dropdown {
   width: 100%;
 }
+
+
+/* the field type validation rules */
+.validation_rules .col2 {
+  width: 160px;
+}
+.validation_rules .rows .col2 {
+	padding-left: 2px;
+	width: 158px;
+}
+.validation_rules .col3 {
+  width: 140px;
+}
+.validation_rules .rows .col3 {
+	padding-left: 2px;
+	width: 138px;
+}
+.validation_rules .col4 {
+  width: 297px;
+}
+.validation_rules .rows .col4 {
+	padding-left: 2px;
+  width: 295px;
+}
+

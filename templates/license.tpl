@@ -16,11 +16,11 @@
   {include file="messages.tpl"}
 
   <div class="margin_bottom_large">
-    {$LANG.phrase_your_license_key} <b>{$module_info.module_key}</b>
+    {$L.phrase_your_license_key} <b>{$module_info.module_key}</b>
   </div>
 
   <div class="margin_bottom_large">
-    {$LANG.text_premium_module_general_license_link}
+    {$L.text_premium_module_general_license_link}
   </div>
 
 {include file='modules_footer.tpl'}

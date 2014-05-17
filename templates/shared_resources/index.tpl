@@ -24,7 +24,7 @@
 	    <div class="tab_row threeCols">
 	      <div class="inner_tab1 {if $current_inner_tab == 1 || $current_inner_tab == ""}selected{/if}">CSS</div>
 	      <div class="inner_tab2 {if $current_inner_tab == 2}selected{/if}">JavaScript</div>
-	      <div class="inner_tab3 {if $current_inner_tab == 3}selected{/if}">Included Files</div>
+	      <div class="inner_tab3 {if $current_inner_tab == 3}selected{/if}">{$L.phrase_included_files}</div>
 	    </div>
 	    <div class="inner_tab_content">
 	      <div class="inner_tab_content1 {if $current_inner_tab != 1 && $current_inner_tab != ""}hidden{/if}">
@@ -57,7 +57,7 @@
 	        <div class="sortable shared_resources_included_files margin_bottom" id="shared_resources_included_files">
 	          <ul class="header_row">
 	            <li class="col1">{$LANG.word_order}</li>
-	            <li class="col2">Path to Resource</li>
+	            <li class="col2">{$L.phrase_path_to_resource}</li>
 	            <li class="col3 colN del"></li>
 	          </ul>
 	          <div class="clear"></div>

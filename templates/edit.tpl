@@ -21,6 +21,12 @@
     {ft_include file='../../modules/custom_fields/templates/tab_displaying.tpl'}
   {elseif $page == "saving"}
     {ft_include file='../../modules/custom_fields/templates/tab_saving.tpl'}
+  {elseif $page == "validation"}
+    {ft_include file='../../modules/custom_fields/templates/tab_validation.tpl'}
+  {elseif $page == "add_validation_rule"}
+    {ft_include file='../../modules/custom_fields/templates/tab_add_validation_rule.tpl'}
+  {elseif $page == "edit_validation_rule"}
+    {ft_include file='../../modules/custom_fields/templates/tab_edit_validation_rule.tpl'}
   {elseif $page == "settings"}
     {ft_include file='../../modules/custom_fields/templates/tab_settings.tpl'}
   {elseif $page == "add_setting"}

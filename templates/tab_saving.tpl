@@ -9,9 +9,7 @@
   <form action="{$same_page}" method="post">
 
     <div class="hint margin_bottom_large">
-      Form Tools automatically saves the value from all field types with what's stored in the name="{literal}{$NAME}{/literal}"
-      field. But if you need to do something special - like combine the content from multiple fields - this is where you'd
-      do it. The PHP entered here <b>must</b> define a $value variable containing the content to store.
+      {$L.text_saving_desc}
     </div>
 
     <div class="editor">

@@ -49,6 +49,9 @@ function cf_add_field_type($info)
     $raw_field_type_map_multi_select_id = (!empty($original_info["raw_field_type_map_multi_select_id"])) ?
       "'{$original_info["raw_field_type_map_multi_select_id"]}'" : "NULL";
     $compatible_field_sizes   = $original_info["compatible_field_sizes"];
+    $view_field_rendering_type      = $original_info["view_field_rendering_type"];
+    $view_field_php_function_source = $original_info["view_field_php_function_source"];
+    $view_field_php_function        = $original_info["view_field_php_function"];
     $view_field_smarty_markup = ft_sanitize($original_info["view_field_smarty_markup"]);
     $edit_field_smarty_markup = ft_sanitize($original_info["edit_field_smarty_markup"]);
     $php_processing           = ft_sanitize($original_info["php_processing"]);
@@ -58,9 +61,11 @@ function cf_add_field_type($info)
     $query = "
       INSERT INTO {$g_table_prefix}field_types (is_editable, field_type_name, field_type_identifier, group_id,
         is_file_field, is_date_field, raw_field_type_map, raw_field_type_map_multi_select_id, list_order, compatible_field_sizes,
+        view_field_rendering_type, view_field_php_function_source, view_field_php_function,
         view_field_smarty_markup, edit_field_smarty_markup, php_processing, resources_css, resources_js)
       VALUES ('yes', '$field_type_name', '$field_type_identifier', $group_id, '$is_file_field', '$is_date_field',
         '$raw_field_type_map', $raw_field_type_map_multi_select_id, $list_order, '$compatible_field_sizes',
+        '$view_field_rendering_type', '$view_field_php_function_source', '$view_field_php_function',
         '$view_field_smarty_markup', '$edit_field_smarty_markup', '$php_processing', '$resources_css', '$resources_js')
     ";
     $result = mysql_query($query) or die(mysql_error());
@@ -69,7 +74,8 @@ function cf_add_field_type($info)
     // now add all the settings
     foreach ($original_info["settings"] as $setting_info)
     {
-      $field_label              = $setting_info["field_label"];
+    	$setting_info = ft_sanitize($setting_info);
+    	$field_label              = $setting_info["field_label"];
       $field_setting_identifier = $setting_info["field_setting_identifier"];
       $field_type               = $setting_info["field_type"];
       $field_orientation        = $setting_info["field_orientation"];
@@ -95,12 +101,32 @@ function cf_add_field_type($info)
         $is_new_sort_group = $option_info["is_new_sort_group"];
 
         $query = "
-          INSERT INTO {$g_table_prefix}field_type_setting_options (setting_id, option_text, option_value,
-            option_order, is_new_sort_group)
+          INSERT INTO {$g_table_prefix}field_type_setting_options (setting_id, option_text, option_value, option_order, is_new_sort_group)
           VALUES ($setting_id, '$option_text', '$option_value', '$option_order', '$is_new_sort_group')
         ";
         @mysql_query($query);
       }
+    }
+
+    // now add the validation
+    foreach ($original_info["validation"] as $rule_info)
+    {
+    	$rule_info = ft_sanitize($rule_info);
+    	$rsv_rule = $rule_info["rsv_rule"];
+    	$rule_label = $rule_info["rule_label"];
+    	$rsv_field_name = $rule_info["rsv_field_name"];
+    	$custom_function = $rule_info["custom_function"];
+    	$custom_function_required = $rule_info["custom_function_required"];
+    	$default_error_message = $rule_info["default_error_message"];
+    	$list_order = $rule_info["list_order"];
+
+      $query = "
+        INSERT INTO {$g_table_prefix}field_type_validation_rules (field_type_id, rsv_rule, rule_label,
+          rsv_field_name, custom_function, custom_function_required, default_error_message, list_order)
+        VALUES ($new_field_type_id, '$rsv_rule', '$rule_label', '$rsv_field_name', '$custom_function',
+          '$custom_function_required', '$default_error_message', $list_order)
+      ";
+      mysql_query($query) or die(mysql_error());
     }
   }
 
@@ -110,7 +136,8 @@ function cf_add_field_type($info)
 
 /**
  * Deletes a field type. If this function is being called, the user has already been notified about what fields
- * use the field type (if any), so we can go ahead and delete it safely. Any fields that used the
+ * use the field type (if any), so we can go ahead and delete it safely. Any fields that used the field will be
+ * assigned to the textbox field type.
  *
  * @param integer $field_type_id
  */
@@ -127,6 +154,7 @@ function cf_delete_field_type($field_type_id)
 
   mysql_query("DELETE FROM {$g_table_prefix}field_types WHERE field_type_id = $field_type_id");
   mysql_query("DELETE FROM {$g_table_prefix}field_type_settings WHERE field_type_id = $field_type_id");
+  mysql_query("DELETE FROM {$g_table_prefix}field_type_validation_rules WHERE field_type_id = $field_type_id");
 
   foreach ($settings as $setting_info)
   {
@@ -139,7 +167,20 @@ function cf_delete_field_type($field_type_id)
   // the textbox field_type_id == 1. Since it can never be changed via this module, it's a reasonable
   // assumption. It also assumes that the textbox permits any field size, so that just resetting the type
   // will be compatible with whatever size it was formerly
-  mysql_query("UPDATE {$g_table_prefix}form_fields SET field_type_id = 1 WHERE field_type_id = $field_type_id");
+  $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
+
+  $field_ids = array();
+  $query = mysql_query("SELECT field_id FROM {$g_table_prefix}form_fields WHERE field_type_id = $field_type_id");
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$field_ids[] = $row["field_id"];
+  }
+  if (!empty($field_ids))
+  {
+  	$field_id_str = implode(",", $field_ids);
+  	mysql_query("DELETE FROM {$g_table_prefix}field_validation WHERE field_id IN ($field_id_str)");
+    mysql_query("UPDATE {$g_table_prefix}form_fields SET field_type_id = $textbox_field_type_id WHERE field_type_id = $field_type_id");
+  }
 
   return array(true, $L["notify_field_type_deleted"]);
 }
@@ -223,6 +264,53 @@ function cf_update_client_tab($field_type_id, $info)
   ");
 
   return array(true, "The custom field information has been updated.");
+}
+
+
+/**
+ * Updates the list of validation rules for a particular field type. Note: this function
+ * does NOT delete any validation rules that have been assigned to any actual field. The reason being,
+ * it's possible that that admin just deleted a field, then will recreate it now. This prevent accidentally
+ * deleting all validation rules assigned to the fields. The fact that those records are orphaned is no big
+ * deal (albeit inelegant). Whenever the field is updated via the Edit Field dialog, the old validation rules
+ * will be automatically removed.
+ *
+ * @param integer $field_type_id
+ * @param array $info
+ */
+function cf_update_validation_tab($field_type_id, $info)
+{
+  global $g_table_prefix, $L;
+
+  $sortable_id = $info["sortable_id"];
+  $rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
+
+  mysql_query("DELETE FROM {$g_table_prefix}field_type_validation_rules WHERE field_type_id = $field_type_id");
+
+  $order = 1;
+  foreach ($rows as $row)
+  {
+  	if (empty($row) || !is_numeric($row))
+  	  continue;
+
+  	$rule = $info["rsv_rule_{$row}"];
+  	$custom_function = $info["custom_function_{$row}"];
+  	$label                 = ft_sanitize($info["label_{$row}"]);
+  	$default_error_message = ft_sanitize($info["default_error_message_{$row}"]);
+
+  	if (empty($rule))
+  	  continue;
+
+    mysql_query("
+      INSERT INTO {$g_table_prefix}field_type_validation_rules (field_type_id, rsv_rule, rule_label, custom_function,
+        default_error_message, list_order)
+      VALUES ($field_type_id, '$rule', '$label', '$custom_function', '$default_error_message', $order)
+    ");
+
+    $order++;
+  }
+
+  return array(true, $L["notify_field_type_validation_updated"]);
 }
 
 

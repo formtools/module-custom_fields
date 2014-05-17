@@ -24,8 +24,8 @@ $page_vars["field_type_info"] = $field_type_info;
 $page_vars["js_messages"] = array("phrase_connect_rows", "phrase_disconnect_rows");
 $page_vars["head_string"] =<<< END
   <link type="text/css" rel="stylesheet" href="$g_root_url/modules/custom_fields/global/css/styles.css">
-  <script type="text/javascript" src="$g_root_url/global/scripts/sortable.js"></script>
-  <script type="text/javascript" src="$g_root_url/modules/custom_fields/global/scripts/custom_fields.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/modules/custom_fields/global/scripts/custom_fields.js"></script>
 END;
 
 $page_vars["head_js"] =<<< END

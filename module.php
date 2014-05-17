@@ -4,10 +4,11 @@ $MODULE = array();
 $MODULE["author"]          = "Encore Web Studios";
 $MODULE["author_email"]    = "formtools@encorewebstudios.com";
 $MODULE["author_link"]     = "http://www.encorewebstudios.com";
-$MODULE["version"]         = "1.0.3";
-$MODULE["date"]            = "2011-09-19";
+$MODULE["version"]         = "1.0.4";
+$MODULE["date"]            = "2011-10-08";
 $MODULE["is_premium"]      = "yes";
 $MODULE["origin_language"] = "en_us";
+
 
 $MODULE["nav"] = array(
   "module_name"             => array('{$module_dir}/index.php', false),

@@ -11,8 +11,8 @@
 
     <div class="inner_tabset" id="custom_fields_edit_field_displaying">
       <div class="tab_row fourCols">
-        <div class="inner_tab1 {if $current_inner_tab == 1 || $current_inner_tab == ""}selected{/if}">View Field</div>
-        <div class="inner_tab2 {if $current_inner_tab == 2}selected{/if}">Edit Field</div>
+        <div class="inner_tab1 {if $current_inner_tab == 1 || $current_inner_tab == ""}selected="selected"{/if}">{$L.phrase_view_field}</div>
+        <div class="inner_tab2 {if $current_inner_tab == 2}selected{/if}">{$L.phrase_edit_field}</div>
         <div class="inner_tab3 {if $current_inner_tab == 3}selected{/if}">CSS</div>
         <div class="inner_tab4 {if $current_inner_tab == 4}selected{/if}">Javascript</div>
       </div>
@@ -21,24 +21,24 @@
 
           <table width="100%">
           <tr>
-            <td width="140" valign="top" rowspan="3">Rendering type</td>
-            <td width="80" class="italic green">Fastest</td>
+            <td width="140" valign="top" rowspan="3">{$L.phrase_rendering_type}</td>
+            <td width="80" class="italic green">{$L.word_fastest}</td>
             <td colspan="2">
               <input type="radio" name="rendering_type" id="rt1" value="none"
                 {if $field_type_info.view_field_rendering_type == "none"}checked{/if} />
-                <label for="rt1">None, output content of database field directly</label>
+                <label for="rt1">{$L.phrase_output_db_value_directly}</label>
             </td>
           </tr>
           <tr>
-            <td width="80" class="italic green" valign="top">Fast</td>
+            <td width="80" class="italic green" valign="top">{$L.word_fast}</td>
             <td width="160" valign="top">
               <input type="radio" name="rendering_type" id="rt2" value="php"
                 {if $field_type_info.view_field_rendering_type == "php"}checked{/if} />
-                <label for="rt2">PHP Function</label>
+                <label for="rt2">{$L.phrase_php_function}</label>
             </td>
             <td>
               <select name="view_field_php_function_source">
-                <option value="core" {if $field_type_info.view_field_php_function_source == "core"}selected{/if}>{$LANG.word_core}</option>
+                <option value="core" {if $field_type_info.view_field_php_function_source == "core"}selected{/if}>{$L.word_core}</option>
                 <optgroup label="{$LANG.word_modules}">
                 {foreach from=$modules item=module_info}
                   <option value="{$module_info.module_id}" {if $field_type_info.view_field_php_function_source == $module_info.module_id}selected{/if}>{$module_info.module_name}</option>
@@ -50,19 +50,18 @@
             </td>
           </tr>
           <tr>
-            <td width="80" class="italic orange">Slower</td>
+            <td width="80" class="italic orange">{$L.word_slower}</td>
             <td colspan="2">
               <input type="radio" name="rendering_type" id="rt3" value="smarty"
                 {if $field_type_info.view_field_rendering_type == "smarty"}checked{/if} />
-                <label for="rt3">Smarty content</label>
+                <label for="rt3">{$L.phrase_smarty_content}</label>
             </td>
           </tr>
           </table>
 
           <div id="view_field_smarty_markup_section" {if $field_type_info.view_field_rendering_type != "smarty"}style="display: none"{/if}>
             <div class="hint margin_bottom_large">
-              This field contains the Smarty used to generate your field markup - it's used anywhere the field
-              is displayed. If left blank, the unmodified content of the database field will be outputted.
+              {$L.text_view_field_smarty_desc}
             </div>
             <div class="editor">
               <textarea id="view_field_smarty_markup" name="view_field_smarty_markup" style="height: 300px">{$field_type_info.view_field_smarty_markup|escape}</textarea>
@@ -80,7 +79,7 @@
         </div>
         <div class="inner_tab_content2 {if $current_inner_tab != 2}hidden{/if}">
           <div class="hint margin_bottom_large">
-            This field contains the Smarty used to generate the field for when it's being edited.
+            {$L.text_edit_field_smarty_desc}
           </div>
           <div class="editor">
             <textarea id="edit_field_smarty_markup" name="edit_field_smarty_markup" style="height: 300px">{$field_type_info.edit_field_smarty_markup|escape}</textarea>
@@ -96,9 +95,7 @@
           {include file="../../modules/custom_fields/templates/available_variables.tpl"}
         </div>
         <div class="inner_tab_content3 {if $current_inner_tab != 3}hidden{/if}">
-          <div class="hint margin_bottom_large">
-            The CSS specified here is included <i>once</i> for all of your field types used in the page.
-          </div>
+          <div class="hint margin_bottom_large">{$L.text_css_desc}</div>
           <div class="editor">
             <textarea id="resources_css" name="resources_css" style="height: 300px">{$field_type_info.resources_css}</textarea>
           </div>
@@ -111,9 +108,7 @@
           </script>
         </div>
         <div class="inner_tab_content4 {if $current_inner_tab != 4}hidden{/if}">
-          <div class="hint margin_bottom_large">
-            The Javascript specified here is included <i>once</i> for all of your field types used in the page.
-          </div>
+          <div class="hint margin_bottom_large">{$L.text_js_desc}</div>
           <div class="editor">
             <textarea id="resources_js" name="resources_js" style="height: 300px">{$field_type_info.resources_js}</textarea>
           </div>
@@ -125,7 +120,6 @@
             {literal}});{/literal}
           </script>
         </div>
-
       </div>
     </div>
 

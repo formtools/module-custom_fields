@@ -9,17 +9,12 @@
   <form action="{$same_page}" method="post">
 
     <div class="hint margin_bottom_large">
-      This section lets you define customizable settings for your field type. These will appear to the
-      administrator whenever they edit a form field of this type. The values from these settings may be used
-      in the Displaying and Saving tab fields to customize the generated markup, or to determine how the field
-      is saved.
+      {$L.text_settings_tab_desc}
     </div>
 
     {if $field_type_settings|@count == 0}
       <div class="notify">
-        <div style="padding: 6px">
-          There are no settings defined for this field type.
-        </div>
+        <div style="padding: 6px">{$L.notify_no_field_type_settings}</div>
       </div>
       <p>
         <input type="button" value="{$L.phrase_add_setting_rightarrow}" onclick="window.location='?page=add_setting'" />
@@ -31,9 +26,9 @@
         <div class="sortable list_settings" id="{$sortable_id}">
           <ul class="header_row">
             <li class="col1">{$LANG.word_order}</li>
-            <li class="col2">Setting Name</li>
+            <li class="col2">{$L.phrase_setting_name}</li>
             <li class="col3">{$LANG.phrase_field_type}</li>
-            <li class="col4">{$LANG.word_identifier}</li>
+            <li class="col4">{$L.word_identifier}</li>
             <li class="col5 edit"></li>
             <li class="col6 colN del"></li>
           </ul>

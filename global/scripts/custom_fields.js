@@ -1,7 +1,7 @@
 var cf_ns = {};
 cf_ns.num_rows = 0;
 cf_ns.__current_field_type_id = null;
-
+cf_ns.num_validation_rules = null; // initialized on page load (Validation tab)
 
 cf_ns.add_setting_option = function() {
   var currRow = ++cf_ns.num_rows;
@@ -191,3 +191,36 @@ cf_ns.add_shared_resource = function() {
   return false;
 }
 
+
+cf_ns.select_validation_rule = function(e) {
+  var rule = $(e.target).val();
+  if (rule == "function") {
+    $("#custom_function_settings").removeClass("hidden");
+    $("#standard_settings").addClass("hidden");
+  } else {
+    $("#custom_function_settings").addClass("hidden");
+    $("#standard_settings").removeClass("hidden");
+  }
+}
+
+
+cf_ns.delete_validation_rule = function(el) {
+  var rule_id = $(el).closest(".row_group").find(".sr_order").val();
+  ft.create_dialog({
+	title:   g.messages["phrase_please_confirm"],
+	content: g.messages["confirm_delete_validation_rule"],
+	popup_type: "warning",
+	buttons: [
+      {
+        text: g.messages["word_yes"],
+        click: function() {
+          window.location = "?delete=" + rule_id;
+        }
+      },
+      {
+        text: g.messages["word_no"],
+        click: function() { $(this).dialog("close"); }
+      }
+    ]
+  })
+}

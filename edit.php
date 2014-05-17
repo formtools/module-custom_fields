@@ -12,7 +12,7 @@ $field_type_id = ft_load_module_field("custom_fields", "field_type_id", "field_t
 // added during development of Form Tools 2.1, to allow quick and easy configuration and testing of
 // the various field types through the the interface. Unless you know what you're doing, you can mess
 // up the fields types needed by the Core script. This would be bad.
-$g_cf_allow_editing_of_non_editable_fields = true;
+$g_cf_allow_editing_of_non_editable_fields = false;
 // ------------------------------------------------------------------------------------------------
 
 // store the current selected tab in memory - except for pages which require additional
@@ -55,13 +55,17 @@ $tabs = array(
       "tab_link" => "{$same_page}?page=saving",
       "pages" => array("saving")
         ),
+  "validation" => array(
+      "tab_label" => $LANG["word_validation"],
+      "tab_link" => "{$same_page}?page=validation",
+      "pages" => array("validation", "add_validation_rule", "edit_validation_rule")
+        ),
   "settings" => array(
       "tab_label" => $LANG["word_settings"],
       "tab_link" => "{$same_page}?page=settings",
       "pages" => array("settings", "add_setting", "edit_setting")
         )
     );
-
 
 $links = cf_get_field_type_prev_next_links($field_type_id);
 $prev_tabset_link = (!empty($links["prev_field_type_id"])) ? "edit.php?page=$page&field_type_id={$links["prev_field_type_id"]}" : "";
@@ -89,6 +93,15 @@ switch ($page)
     break;
   case "settings":
     require_once("tab_settings.php");
+    break;
+  case "validation":
+    require_once("tab_validation.php");
+    break;
+  case "add_validation_rule":
+    require_once("tab_add_validation_rule.php");
+    break;
+  case "edit_validation_rule":
+    require_once("tab_edit_validation_rule.php");
     break;
   case "add_setting":
     require_once("tab_add_setting.php");

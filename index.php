@@ -18,7 +18,6 @@ if (isset($request["update_page"]))
 
 $grouped_field_types = ft_get_grouped_field_types();
 
-// this is lazy. Parse it out of the above variable you lazy sod!
 $id_to_identifier = ft_get_field_type_id_to_identifier();
 $identifiers = array();
 foreach (array_values($id_to_identifier) as $identifier)
@@ -33,8 +32,9 @@ $page_vars["js_messages"] = array("word_edit");
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["field_type_groups"] = ft_get_field_type_groups(false);
 $page_vars["js_messages"] = array("word_cancel", "phrase_create_group", "word_yes", "word_no", "phrase_please_confirm",
-  "confirm_delete_group", "word_error", "word_okay", "notify_cannot_delete_nonempty_group", "phrase_delete_field_type");
-$page_vars["module_js_messages"] = array("phrase_delete_field_type", "confirm_delete_field_type");
+  "confirm_delete_group", "word_error", "word_okay", "phrase_delete_field_type");
+$page_vars["module_js_messages"] = array("phrase_delete_field_type", "confirm_delete_field_type",
+  "notify_cannot_delete_nonempty_group");
 
 $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/sortable.js"></script>
@@ -124,7 +124,7 @@ $(function() {
 
     ft.create_dialog({
       dialog:     field_type_info_dialog,
-      title:      "{$LANG["phrase_field_type_information"]}",
+      title:      "{$L["phrase_field_type_information"]}",
       min_width:  400,
       content: "<div id=\"field_type_info\"><div class=\"ajax_activity\"></div></div>",
       buttons: [{
@@ -146,18 +146,6 @@ $(function() {
     });
   });
 });
-
-
-/*
-- TODO
-Right now there are X fields that use this field type. You may delete the field type here, but it will reset all
-of these fields to textboxes.
-Form 1 (each open edit Form -> Fields tab in new Window)
-Form 2
-Form 3
-Form 4
-Are you sure you want to delete this field?
-*/
 
 END;
 

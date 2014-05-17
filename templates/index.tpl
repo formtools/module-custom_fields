@@ -48,13 +48,15 @@
           <ul class="header_row">
             <li class="col1">{$LANG.word_order}</li>
             <li class="col2">{$LANG.phrase_field_type}</li>
-            <li class="col3">{$L.phrase_compatible_field_sizes}</li>
-            <li class="col4">{$L.phrase_num_settings}</li>
-            <li class="col5 edit"></li>
-            <li class="col6 colN del"></li>
+            <li class="col3">{$L.word_identifier}</li>
+            <li class="col4">{$L.phrase_compatible_field_sizes}</li>
+            <li class="col5">{$LANG.word_validation}</li>
+            <li class="col6">{$LANG.word_settings}</li>
+            <li class="col7 edit"></li>
+            <li class="col8 colN del"></li>
           </ul>
           <div class="clear"></div>
-          <ul class="rows connected_sortable{if $field_types|@count > 0} has_rows_onload{/if}">
+          <ul class="rows check_areas connected_sortable{if $field_types|@count > 0} has_rows_onload{/if}">
             <li class="sortable_row empty_group{if $field_types|@count != 0} hidden{/if}"><div class="clear"></div></li>
             {assign var=previous_item value=""}
             {foreach from=$field_types key=k item=i name=row}
@@ -65,12 +67,12 @@
                     <ul>
                       <li class="col1 sort_col">{$i.list_order}</li>
                       <li class="col2">{eval var=$i.field_type_name}</li>
-                      <li class="col3">
-                        {field_sizes_dropdown name="compatible_field_sizes" field_type_id=$i.field_type_id}
-                      </li>
-                      <li class="col4">{$i.settings|@count}</li>
-                      <li class="col5 edit"><a href="edit.php?field_type_id={$i.field_type_id}"></a></li>
-                      <li class="col6 colN {if $i.is_editable == "yes"} del{/if}{if $i.non_editable_info} info{/if}"></li>
+                      <li class="col3">{eval var=$i.field_type_identifier}</li>
+                      <li class="col4">{field_sizes_dropdown name="compatible_field_sizes" field_type_id=$i.field_type_id}</li>
+                      <li class="col5 check_area"><a href="edit.php?page=validation&field_type_id={$i.field_type_id}">{$i.validation|@count}</a></li>
+                      <li class="col6 check_area"><a href="edit.php?page=settings&field_type_id={$i.field_type_id}">{$i.settings|@count}</a></li>
+                      <li class="col7 edit"><a href="edit.php?field_type_id={$i.field_type_id}"></a></li>
+                      <li class="col8 colN {if $i.is_editable == "yes"} del{/if}{if $i.non_editable_info} info{/if}"></li>
                     </ul>
                     <div class="clear"></div>
                   </div>
@@ -104,17 +106,14 @@
     <div class="add_field_error hidden error"></div>
     <table cellspacing="1" cellpadding="3" width="100%">
     <tr>
-      <td width="140" valign="top">{$LANG.phrase_field_name}</td>
+      <td width="140" valign="top">{$L.phrase_field_name}</td>
       <td><input type="text" class="field_type_name" /></td>
     </tr>
     <tr>
       <td valign="top">{$L.phrase_field_type_identifier}</td>
       <td>
         <input type="text" class="field_type_identifier" />
-        <div class="hint">
-          This should be an alphanumeric string that will be used to programmatically reference your new field type,
-          e.g. "my_field_type"
-        </div>
+        <div class="hint">{$L.text_field_type_identifier_desc}</div>
       </td>
     </tr>
     <tr>
@@ -161,15 +160,17 @@
     <ul class="header_row">
       <li class="col1">{$LANG.word_order}</li>
       <li class="col2">{$LANG.phrase_field_type}</li>
-      <li class="col3">{$L.phrase_compatible_field_sizes}</li>
-      <li class="col4">{$L.phrase_num_settings}</li>
-      <li class="col5 edit"></li>
-      <li class="col6 colN del"></li>
+      <li class="col3">{$L.word_identifier}</li>
+      <li class="col4">{$L.phrase_compatible_field_sizes}</li>
+      <li class="col5">{$LANG.word_validation}</li>
+      <li class="col6">{$LANG.word_settings}</li>
+      <li class="col7 edit"></li>
+      <li class="col8 colN del"></li>
     </ul>
   </div>
   <div id="sortable__new_group_footer" class="hidden">
     <div class="sortable_group_footer">
-      <a href="#" class="add_field_link">{$L.phrase_add_field_rightarrow}</a>
+      <a href="#" class="add_field_link">{$L.phrase_add_field_type_rightarrow}</a>
     </div>
   </div>
 

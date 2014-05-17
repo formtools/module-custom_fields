@@ -14,19 +14,14 @@
       <td valign="top" width="150">{$L.phrase_field_label}</td>
       <td>
         <input type="text" name="field_label" id="field_label" class="full_width" value="" />
-        <div class="light_grey">
-          This is used to describe what the setting does.
-        </div>
+        <div class="light_grey">{$L.phrase_setting_label_desc}</div>
       </td>
     </tr>
     <tr>
       <td valign="top">{$LANG.word_identifier}</td>
       <td>
         <input type="text" name="field_setting_identifier" value="" class="full_width" maxlength="50" />
-        <div class="light_grey">
-          The identifier is a unique string that identifies the content of the field setting. It is
-          used to reference the setting in your code.
-        </div>
+        <div class="light_grey">{$L.text_field_setting_desc}</div>
       </td>
     </tr>
     <tr>
@@ -55,13 +50,12 @@
       <tr>
         <td width="150" valign="top">{$L.phrase_default_value}</td>
         <td>
-
           <table cellspacing="0" cellpadding="0">
           <tr>
             <td valign="top" width="25">
               <input type="radio" name="default_value_type" value="static" id="dvt1" checked />
             </td>
-            <td width="120" valign="top"><label for="dvt1">Static value</label></td>
+            <td width="120" valign="top"><label for="dvt1">{$L.phrase_static_value}</label></td>
             <td>
               <input type="text" name="default_value_static" id="dv1" class="med_width" />
             </td>
@@ -70,10 +64,10 @@
             <td valign="top">
               <input type="radio" name="default_value_type" value="dynamic" id="dvt2" />
             </td>
-            <td valign="top"><label for="dvt2">Dynamic value</label></td>
+            <td valign="top"><label for="dvt2">{$L.phrase_dynamic_value}</label></td>
             <td>
-              <input type="text" name="default_value_dynamic" id="dv2" class="med_width" disabled />
-              <div class="light_grey">Format: setting_name,module_folder/"core"</div>
+              <input type="text" name="default_value_dynamic" id="dv2" class="med_width" disabled="disabled"  />
+              <div class="light_grey">{$L.phrase_dynamic_value_format_desc}</div>
             </td>
           </tr>
           </table>
@@ -90,7 +84,7 @@
           <tr>
             <td width="160"><label for="field_orientation">{$L.word_orientation}</label></td>
             <td>
-              <input type="radio" name="field_orientation" id="fo1" value="horizontal" checked />
+              <input type="radio" name="field_orientation" id="fo1" value="horizontal" checked="checked" />
                 <label for="fo1">{$LANG.word_horizontal}</label>
               <input type="radio" name="field_orientation" id="fo2" value="vertical" />
                 <label for="fo2">{$LANG.word_vertical}</label>
