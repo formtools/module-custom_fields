@@ -1,5 +1,10 @@
   <div class="subtitle underline margin_top_large">{$LANG.word_validation|upper}</div>
 
+  {if $field_type_info.is_editable == "no" && !$g_cf_allow_editing_of_non_editable_fields}
+    {assign var=g_success value=true}
+    {assign var=g_message value=$L.text_non_editable_field_type}
+  {/if}
+
   {include file="messages.tpl"}
 
   <form action="{$same_page}" method="post">
@@ -52,10 +57,13 @@
       </div>
     {/if}
 
+    {if $field_type_info.is_editable == "yes" || $g_cf_allow_editing_of_non_editable_fields}
     <p>
       {if $field_type_info.validation|@count > 1}
         <input type="submit" name="update_order" value="{$LANG.word_update}" />
       {/if}
       <input type="button" value="{$L.phrase_add_validation_rule_rightarrow}" onclick="window.location='?page=add_validation_rule'" />
     </p>
+    {/if}
+
   </form>

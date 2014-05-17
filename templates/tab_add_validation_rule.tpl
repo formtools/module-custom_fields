@@ -1,5 +1,9 @@
   <div class="subtitle underline margin_top_large">{$L.phrase_add_validation_rule|upper}</div>
 
+  {if $field_type_info.is_editable == "no" && !$g_cf_allow_editing_of_non_editable_fields}
+    {assign var=g_success value=true}
+    {assign var=g_message value=$L.text_non_editable_field_type}
+  {/if}
   {include file="messages.tpl"}
 
   <form action="{$same_page}" method="post" onsubmit="return rsv.validate(this, rules)">
