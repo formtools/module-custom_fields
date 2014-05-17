@@ -43,6 +43,7 @@ $L["phrase_static_field_types"] = "Static Field Types";
 $L["phrase_dynamic_field_types"] = "Dynamic Field Types";
 $L["phrase_custom_option_list_defined_below"] = "Custom option list, defined below";
 $L["phrase_populate_setting_from"] = "Populate the contents of this setting from";
+$L["phrase_field_type_information"] = "Field Type Information";
 
 $L["notify_custom_field_updated"] = "The custom field information has been updated.";
 $L["notify_custom_fields_updated"] = "The custom fields have been updated.";
