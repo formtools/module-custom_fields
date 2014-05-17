@@ -78,7 +78,7 @@
           {foreach from=$field_type_info.settings item=setting_info}
             {if $setting_info.field_type == "option_list_or_form_field"}
               <option value="{$setting_info.setting_id}"
-                {if $field_type_info.raw_field_type_map_multi_select_id == $setting_info.setting_id}selected{/if}>{$setting_info.field_label}</option>
+                {if $field_type_info.raw_field_type_map_multi_select_id == $setting_info.setting_id}selected="selected"{/if}>{eval var=$setting_info.field_label}</option>
             {/if}
           {/foreach}
         </select>

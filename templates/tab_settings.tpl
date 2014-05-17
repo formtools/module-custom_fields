@@ -41,7 +41,7 @@
                   <input type="hidden" class="sr_order" value="{$i.setting_id}" />
                   <ul>
                     <li class="col1 sort_col">{$i.list_order}</li>
-                    <li class="col2">{$i.field_label}</li>
+                    <li class="col2">{eval var=$i.field_label}</li>
                     <li class="col3">
                       {if $i.field_type == "textbox"}
                         {$LANG.word_textbox}
