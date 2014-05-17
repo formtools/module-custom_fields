@@ -31,6 +31,10 @@ foreach ($groups as $group_info)
         continue;
 
       list($field_type_identifier, $field_type_setting_identifier) = explode(",", $pair);
+
+      if (!array_key_exists($field_type_identifier, $identifier_to_id))
+      	continue;
+
       $mapped[] = array(
         "field_type_identifier"         => $field_type_identifier,
         "field_type_id"                 => $identifier_to_id[$field_type_identifier],
