@@ -33,10 +33,8 @@
 			        style="height: 400px">{$edit_submission_shared_resources_css}</textarea>
 			    </div>
 			    <script type="text/javascript">
-			      var edit_submission_shared_resources_css_field = new CodeMirror.fromTextArea("edit_submission_shared_resources_css", {literal}{{/literal}
-			        parserfile: ["parsecss.js"],
-			        path: "{$g_root_url}/global/codemirror/js/",
-			        stylesheet: "{$g_root_url}/global/codemirror/css/csscolors.css"
+			      var edit_submission_shared_resources_css_field = new CodeMirror.fromTextArea(document.getElementById("edit_submission_shared_resources_css"), {literal}{{/literal}
+			        mode: "css"
 			      {literal}});{/literal}
 			    </script>
 			  </div>
@@ -46,10 +44,8 @@
 			        style="height: 400px">{$edit_submission_shared_resources_js}</textarea>
 			    </div>
 			    <script type="text/javascript">
-			      var edit_submission_shared_resources_js_field = new CodeMirror.fromTextArea("edit_submission_shared_resources_js", {literal}{{/literal}
-			        parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-			        path: "{$g_root_url}/global/codemirror/js/",
-			        stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+			      var edit_submission_shared_resources_js_field = new CodeMirror.fromTextArea(document.getElementById("edit_submission_shared_resources_js"), {literal}{{/literal}
+			        mode: "javascript"
 			      {literal}});{/literal}
 			    </script>
 	      </div>

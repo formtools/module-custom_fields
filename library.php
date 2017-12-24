@@ -1,7 +1,6 @@
 <?php
 
-$folder = dirname(__FILE__);
-require_once("$folder/global/code/module.php");
-require_once("$folder/global/code/field_types.php");
-require_once("$folder/global/code/field_type_settings.php");
-require_once("$folder/global/code/validation.php");
+require_once(__DIR__ . "/code/FieldTypes.class.php");
+require_once(__DIR__ . "/code/FieldTypeSettings.class.php");
+require_once(__DIR__ . "/code/Module.class.php");
+require_once(__DIR__ . "/code/Validation.class.php");

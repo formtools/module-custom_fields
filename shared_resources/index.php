@@ -1,36 +1,55 @@
 <?php
 
 require_once("../../../global/library.php");
-ft_init_module_page();
+
+use FormTools\Core;
+use FormTools\Modules;
+use FormTools\Sessions;
+use FormTools\Settings;
+
+$module = Modules::initModulePage("admin");
+$root_url = Core::getRootUrl();
+
 $sortable_id = "shared_resources_included_files";
 
-if (isset($_POST["update"]))
-{
-  $_POST["sortable_id"] = $sortable_id;
-  list($g_success, $g_message) = cf_update_shared_resources($_POST);
+if (isset($_POST["update"])) {
+    $_POST["sortable_id"] = $sortable_id;
+    list($g_success, $g_message) = cf_update_shared_resources($_POST);
 }
 
-$settings = ft_get_settings(array("edit_submission_shared_resources_js", "edit_submission_shared_resources_css", "edit_submission_onload_resources"));
-$current_inner_tab = isset($_SESSION["ft"]["inner_tabs"]["shared_resources"]) ? $_SESSION["ft"]["inner_tabs"]["shared_resources"] : "";
+$settings = Settings::get(array(
+    "edit_submission_shared_resources_js",
+    "edit_submission_shared_resources_css",
+    "edit_submission_onload_resources"
+));
+$current_inner_tab = Sessions::getWithFallback("inner_tabs.shared_resources", "");
 
-$page_vars = array();
-$page_vars["current_inner_tab"] = $current_inner_tab;
-$page_vars["sortable_id"] = $sortable_id;
-$page_vars["head_string"] =<<< EOF
-<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
-<script src="$g_root_url/global/scripts/sortable.js"></script>
-<script src="$g_root_url/modules/custom_fields/global/scripts/custom_fields.js"></script>
-<link type="text/css" rel="stylesheet" href="$g_root_url/modules/custom_fields/global/css/styles.css">
-EOF;
+$page_vars = array(
+    "current_inner_tab" => $current_inner_tab,
+    "sortable_id" => $sortable_id,
+);
 
-$page_vars["edit_submission_shared_resources_js"]  = $settings["edit_submission_shared_resources_js"];
+$page_vars["css_files"] = array(
+    "$root_url/global/codemirror/lib/codemirror.css",
+    "$root_url/modules/custom_fields/css/styles.css"
+);
+$page_vars["js_files"] = array(
+    "$root_url/global/codemirror/lib/codemirror.js",
+    "$root_url/global/scripts/sortable.js",
+    "$root_url/modules/custom_fields/scripts/custom_fields.js",
+    "$root_url/global/codemirror/mode/css/css.js",
+    "$root_url/global/codemirror/mode/javascript/javascript.js",
+    "$root_url/global/codemirror/mode/clike/clike.js"
+);
+
+$page_vars["edit_submission_shared_resources_js"] = $settings["edit_submission_shared_resources_js"];
 $page_vars["edit_submission_shared_resources_css"] = $settings["edit_submission_shared_resources_css"];
-$page_vars["edit_submission_onload_resources"]     = explode("|", $settings["edit_submission_onload_resources"]);
+$page_vars["edit_submission_onload_resources"] = explode("|", $settings["edit_submission_onload_resources"]);
 
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] = <<< END
 $(function() {
-  ft.init_inner_tabs();
+    ft.init_inner_tabs();
 });
-EOF;
+END;
 
-ft_display_module_page("templates/shared_resources/index.tpl", $page_vars);
+$module->displayPage("templates/shared_resources/index.tpl", $page_vars);

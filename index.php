@@ -1,48 +1,69 @@
 <?php
 
 require_once("../../global/library.php");
-ft_init_module_page();
-$request = array_merge($_POST, $_GET);
+
+use FormTools\Core;
+use FormTools\FieldTypes;
+use FormTools\Modules;
+
+$module = Modules::initModulePage("admin");
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
+$L = $module->getLangStrings();
+
 $sortable_id = "custom_fields";
 
-if (isset($request["update_page"]))
-{
-  $request["sortable_id"] = $sortable_id;
-  list($g_success, $g_message) = cf_update_custom_fields($request);
+$success = true;
+$message = "";
+if (isset($request["update_page"])) {
+    $request["sortable_id"] = $sortable_id;
+    list($success, $message) = cf_update_custom_fields($request);
 
-  // if the user just deleted a custom field, override the default update message
-  if (!empty($request["delete_field_type"])) {
-    list($g_success, $g_message) = cf_delete_field_type($request["delete_field_type"]);
-  }
+    // if the user just deleted a custom field, override the default update message
+    if (!empty($request["delete_field_type"])) {
+        list($success, $message) = cf_delete_field_type($request["delete_field_type"]);
+    }
 }
 
-$grouped_field_types = ft_get_grouped_field_types();
+$grouped_field_types = FieldTypes::getGroupedFieldTypes();
+$id_to_identifier = FieldTypes::getFieldTypeIdToIdentifierMap();
 
-$id_to_identifier = ft_get_field_type_id_to_identifier();
 $identifiers = array();
-foreach (array_values($id_to_identifier) as $identifier)
-{
-  $identifiers[] = "'$identifier'";
+foreach (array_values($id_to_identifier) as $identifier) {
+    $identifiers[] = "'$identifier'";
 }
 $existing_field_type_identifiers_js = "existing_field_type_identifiers = [" . implode(",", $identifiers) . "];";
 
-$page_vars = array();
-$page_vars["grouped_field_types"] = $grouped_field_types;
-$page_vars["js_messages"] = array("word_edit");
-$page_vars["sortable_id"] = $sortable_id;
-$page_vars["field_type_groups"] = ft_get_field_type_groups(false);
-$page_vars["js_messages"] = array("word_cancel", "phrase_create_group", "word_yes", "word_no", "phrase_please_confirm",
-  "confirm_delete_group", "word_error", "word_okay", "phrase_delete_field_type");
-$page_vars["module_js_messages"] = array("phrase_delete_field_type", "confirm_delete_field_type",
-  "notify_cannot_delete_nonempty_group");
+$page_vars = array(
+    "grouped_field_types" => $grouped_field_types,
+    "sortable_id" => $sortable_id,
+    "field_type_groups" => FieldTypes::getFieldTypeGroups(),
+    "js_messages" => array(
+        "word_cancel",
+        "word_edit",
+        "phrase_create_group",
+        "word_yes",
+        "word_no",
+        "phrase_please_confirm",
+        "confirm_delete_group",
+        "word_error",
+        "word_okay",
+        "phrase_delete_field_type"
+    ),
+    "module_js_messages" => array(
+        "phrase_delete_field_type",
+        "confirm_delete_field_type",
+        "notify_cannot_delete_nonempty_group"
+    )
+);
 
-$page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/sortable.js"></script>
-  <script src="$g_root_url/modules/custom_fields/global/scripts/custom_fields.js"></script>
-  <link type="text/css" rel="stylesheet" href="$g_root_url/modules/custom_fields/global/css/styles.css">
+$page_vars["head_string"] = <<< END
+  <script src="$root_url/global/scripts/sortable.js"></script>
+  <script src="$root_url/modules/custom_fields/scripts/custom_fields.js"></script>
+  <link type="text/css" rel="stylesheet" href="$root_url/modules/custom_fields/css/styles.css">
 END;
 
-$page_vars["head_js"] =<<< END
+$page_vars["head_js"] = <<< END
 $(function() {
   $existing_field_type_identifiers_js
 
@@ -146,7 +167,6 @@ $(function() {
     });
   });
 });
-
 END;
 
-ft_display_module_page("templates/index.tpl", $page_vars);
+$module->displayPage("templates/index.tpl", $page_vars);

@@ -92,5 +92,4 @@
       <input type="submit" name="update" value="{$LANG.word_update}" />
     </div>
     {/if}
-
   </form>
