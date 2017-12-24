@@ -3,8 +3,10 @@
 namespace FormTools\Modules\CustomFields;
 
 use FormTools\Core;
+use FormTools\ListGroups;
 use FormTools\FieldSizes;
 use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Settings;
 use PDO;
 
 class FieldTypes
@@ -240,78 +242,85 @@ class FieldTypes
      * @param $field_type_id
      * @param $info
      */
-    function cf_update_main_tab($field_type_id, $info)
+    public static function updateMainTab($field_type_id, $info, $L)
     {
-        global $g_table_prefix, $L;
+        $db = Core::$db;
 
-        $info = ft_sanitize($info);
-
-        $old_field_type_info = ft_get_field_type($field_type_id);
+        $old_field_type_info = CoreFieldTypes::getFieldType($field_type_id);
         $old_group_id = $old_field_type_info["group_id"];
-
-        $field_type_name = $info["field_type_name"];
         $group_id = $info["group_id"];
-        $is_file_field = $info["is_file_field"];
-        $is_date_field = $info["is_date_field"];
-        $list_order = $old_field_type_info["list_order"];
-        $compatible_field_sizes = implode(",", $info["compatible_field_sizes"]);
-        $raw_field_type_map = $info["raw_field_type_map"];
+
         $raw_field_type_map_multi_select_id = (isset($info["raw_field_type_map_multi_select_id"]) && !empty($info["raw_field_type_map_multi_select_id"])) ?
-        $info["raw_field_type_map_multi_select_id"] : "NULL";
+            $info["raw_field_type_map_multi_select_id"] : null;
 
         // if the user just change the group, just add it to the end
+        $list_order = $old_field_type_info["list_order"];
         if ($group_id != $old_group_id) {
-            $num_field_types = _cf_get_num_field_types($group_id);
+            $num_field_types = self::getNumFieldTypes($group_id);
             $list_order = $num_field_types + 1;
         }
 
-        mysql_query("
-    UPDATE {PREFIX}field_types
-    SET    field_type_name = '$field_type_name',
-           compatible_field_sizes = '$compatible_field_sizes',
-           group_id = $group_id,
-           is_file_field = '$is_file_field',
-           is_date_field = '$is_date_field',
-           raw_field_type_map = '$raw_field_type_map',
-           raw_field_type_map_multi_select_id = $raw_field_type_map_multi_select_id,
-           list_order = $list_order
-    WHERE  field_type_id = $field_type_id
-  ");
+        $db->query("
+            UPDATE {PREFIX}field_types
+            SET    field_type_name = :field_type_name,
+                   compatible_field_sizes = :compatible_field_sizes,
+                   group_id = :group_id,
+                   is_file_field = :is_file_field,
+                   is_date_field = :is_date_field,
+                   raw_field_type_map = :raw_field_type_map,
+                   raw_field_type_map_multi_select_id = :raw_field_type_map_multi_select_id,
+                   list_order = :list_order
+            WHERE  field_type_id = :field_type_id
+        ");
+        $db->bindAll(array(
+            "field_type_name" => $info["field_type_name"],
+            "compatible_field_sizes" => implode(",", $info["compatible_field_sizes"]),
+            "group_id" => $group_id,
+            "is_file_field" => $info["is_file_field"],
+            "is_date_field" => $info["is_date_field"],
+            "raw_field_type_map" => $info["raw_field_type_map"],
+            "raw_field_type_map_multi_select_id" => $raw_field_type_map_multi_select_id,
+            "list_order" => $list_order,
+            "field_type_id" => $field_type_id
+        ));
+        $db->execute();
 
         if ($group_id != $old_group_id) {
-            _cf_sort_field_group($old_group_id);
+            FieldTypes::sortFieldGroup($old_group_id);
         }
 
         return array(true, $L["notify_custom_field_updated"]);
     }
 
 
-    function cf_update_client_tab($field_type_id, $info)
+    public static function updateClientTab($field_type_id, $info, $L)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $info = ft_sanitize($info);
-        $rendering_type = $info["rendering_type"];
-        $view_field_php_function_source = $info["view_field_php_function_source"];
-        $function_name = $info["function_name"];
-        $view_field_smarty_markup = $info["view_field_smarty_markup"];
-        $edit_field_smarty_markup = $info["edit_field_smarty_markup"];
-        $resources_js = $info["resources_js"];
-        $resources_css = $info["resources_css"];
+        $db->query("
+            UPDATE {PREFIX}field_types
+            SET    view_field_rendering_type = :view_field_rendering_type,
+                   view_field_php_function_source = :view_field_php_function_source,
+                   view_field_php_function = :view_field_php_function,
+                   view_field_smarty_markup = :view_field_smarty_markup,
+                   edit_field_smarty_markup = :edit_field_smarty_markup,
+                   resources_js      = :resources_js,
+                   resources_css     = :resources_css
+            WHERE  field_type_id = :field_type_id
+        ");
+        $db->bindAll(array(
+            "view_field_rendering_type" => $info["rendering_type"],
+            "view_field_php_function_source" => $info["view_field_php_function_source"],
+            "view_field_php_function" => $info["function_name"],
+            "view_field_smarty_markup" => $info["view_field_smarty_markup"],
+            "edit_field_smarty_markup" => $info["edit_field_smarty_markup"],
+            "resources_js" => $info["resources_js"],
+            "resources_css" => $info["resources_css"],
+            "field_type_id" => $field_type_id
+        ));
+        $db->execute();
 
-        mysql_query("
-    UPDATE {PREFIX}field_types
-    SET    view_field_rendering_type = '$rendering_type',
-           view_field_php_function_source = '$view_field_php_function_source',
-           view_field_php_function = '$function_name',
-           view_field_smarty_markup = '$view_field_smarty_markup',
-           edit_field_smarty_markup = '$edit_field_smarty_markup',
-           resources_js      = '$resources_js',
-           resources_css     = '$resources_css'
-    WHERE  field_type_id = $field_type_id
-  ");
-
-        return array(true, "The custom field information has been updated.");
+        return array(true, $L["notify_custom_field_updated"]);
     }
 
 
@@ -326,14 +335,16 @@ class FieldTypes
      * @param integer $field_type_id
      * @param array $info
      */
-    function cf_update_validation_tab($field_type_id, $info)
+    public static function updateValidationTab($field_type_id, $info, $L)
     {
-        global $g_table_prefix, $L;
+        $db = Core::$db;
 
         $sortable_id = $info["sortable_id"];
         $rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
 
-        mysql_query("DELETE FROM {PREFIX}field_type_validation_rules WHERE field_type_id = $field_type_id");
+        $db->query("DELETE FROM {PREFIX}field_type_validation_rules WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
 
         $order = 1;
         foreach ($rows as $row) {
@@ -341,20 +352,24 @@ class FieldTypes
                 continue;
             }
 
-            $rule = $info["rsv_rule_{$row}"];
-            $custom_function = $info["custom_function_{$row}"];
-            $label = ft_sanitize($info["label_{$row}"]);
-            $default_error_message = ft_sanitize($info["default_error_message_{$row}"]);
-
             if (empty($rule)) {
                 continue;
             }
 
-            mysql_query("
-      INSERT INTO {PREFIX}field_type_validation_rules (field_type_id, rsv_rule, rule_label, custom_function,
-        default_error_message, list_order)
-      VALUES ($field_type_id, '$rule', '$label', '$custom_function', '$default_error_message', $order)
-    ");
+            $db->query("
+                INSERT INTO {PREFIX}field_type_validation_rules (field_type_id, rsv_rule, rule_label, custom_function,
+                    default_error_message, list_order)
+                VALUES (:field_type_id, :rsv_rule, :rule_label, :custom_function, :default_error_message, :list_order)
+            ");
+            $db->bindAll(array(
+                "field_type_id" => $field_type_id,
+                "rsv_rule" => $info["rsv_rule_{$row}"],
+                "rule_label" => $info["label_{$row}"],
+                "custom_function" => $info["custom_function_{$row}"],
+                "default_error_message" => $info["default_error_message_{$row}"],
+                "list_order" => $order
+            ));
+            $db->execute();
 
             $order++;
         }
@@ -363,20 +378,21 @@ class FieldTypes
     }
 
 
-    function cf_update_server_tab($field_type_id, $info)
+    public static function updateServerTab($field_type_id, $info, $L)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $info = ft_sanitize($info);
+        $db->query("
+            UPDATE {PREFIX}field_types
+            SET    php_processing = :php_processing
+            WHERE  field_type_id = :field_type_id
+        ");
+        $db->bindAll(array(
+            "php_processing" => $info["php_processing"],
+            "field_type_id" => $field_type_id
+        ));
 
-        $php_processing = $info["php_processing"];
-        mysql_query("
-    UPDATE {PREFIX}field_types
-    SET    php_processing = '$php_processing'
-    WHERE  field_type_id = $field_type_id
-  ") or die(mysql_error());
-
-        return array(true, "The custom field information has been updated.");
+        return array(true, $L["notify_custom_field_updated"]);
     }
 
 
@@ -386,26 +402,30 @@ class FieldTypes
      *
      * @param $info the post request
      */
-    function cf_update_custom_fields($info)
+    public static function updateCustomFields($info, $L)
     {
-        global $g_table_prefix, $L;
+        $db = Core::$db;
 
         $sortable_id = $info["sortable_id"];
 
         // perhaps this entire thing could get moved to a helper function...?
         $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
 
-        $ordered_group_ids = array();
         $new_group_order = 1;
         foreach ($grouped_info as $curr_grouped_info) {
             list($curr_group_id, $ordered_field_type_ids_str) = explode("|", $curr_grouped_info);
             $ordered_field_type_ids = explode(",", $ordered_field_type_ids_str);
 
-            @mysql_query("
-      UPDATE {PREFIX}list_groups
-      SET    list_order = $new_group_order
-      WHERE  group_id = $curr_group_id
-        ");
+            $db->query("
+                UPDATE {PREFIX}list_groups
+                SET    list_order = :list_order
+                WHERE  group_id = :group_id
+            ");
+            $db->bindAll(array(
+                "list_order" => $new_group_order,
+                "group_id" => $curr_group_id
+            ));
+            $db->execute();
 
             $new_field_type_order = 1;
 
@@ -414,46 +434,58 @@ class FieldTypes
                     continue;
                 }
 
-                mysql_query("
-        UPDATE {PREFIX}field_types
-        SET    group_id = $curr_group_id,
-               list_order = $new_field_type_order
-        WHERE  field_type_id = $field_type_id
-      ");
+                $db->query("
+                    UPDATE {PREFIX}field_types
+                    SET    group_id = :group_id,
+                           list_order = :list_order
+                    WHERE  field_type_id = :field_type_id
+                ");
+                $db->bindAll(array(
+                    "group_id" => $curr_group_id,
+                    "list_order" => $new_field_type_order,
+                    "field_type_id" => $field_type_id
+                ));
+                $db->execute();
+
                 $new_field_type_order++;
             }
 
             // now update the group name
-            $group_name = ft_sanitize($info["group_name_{$curr_group_id}"]);
-            mysql_query("
-      UPDATE {PREFIX}list_groups
-      SET    group_name = '$group_name'
-      WHERE  group_id = $curr_group_id
-    ");
+            $db->query("
+                UPDATE {PREFIX}list_groups
+                SET    group_name = :group_name
+                WHERE  group_id = :group_id
+            ");
+            $db->bindAll(array(
+                "group_name" => $info["group_name_{$curr_group_id}"],
+                "group_id" => $curr_group_id
+            ));
+            $db->execute();
 
             $new_group_order++;
         }
 
         if (isset($info["{$sortable_id}_sortable__delete_group"])) {
-            ft_delete_list_group($info["{$sortable_id}_sortable__delete_group"]);
+            ListGroups::deleteListGroup($info["{$sortable_id}_sortable__delete_group"]);
         }
 
         return array(true, $L["notify_custom_fields_updated"]);
     }
 
 
-    function _cf_get_num_field_types($group_id)
+    public static function getNumFieldTypes($group_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $query = mysql_query("
-    SELECT count(*) as c
-    FROM   {PREFIX}field_types
-    WHERE  group_id = $group_id
-  ");
-        $result = mysql_fetch_assoc($query);
+        $db->query("
+            SELECT count(*)
+            FROM   {PREFIX}field_types
+            WHERE  group_id = :group_id
+        ");
+        $db->bind("group_id", $group_id);
+        $db->execute();
 
-        return $result["c"];
+        return $db->fetch(PDO::FETCH_COLUMN);
     }
 
 
@@ -462,25 +494,32 @@ class FieldTypes
      *
      * @param integer $group_id
      */
-    function _cf_sort_field_group($group_id)
+    public static function sortFieldGroup($group_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $query = mysql_query("
-    SELECT field_type_id
-    FROM   {PREFIX}field_types
-    WHERE  group_id = $group_id
-    ORDER BY list_order
-  ");
+        $db->query("
+            SELECT field_type_id
+            FROM   {PREFIX}field_types
+            WHERE  group_id = $group_id
+            ORDER BY list_order
+        ");
+        $db->bind("group_id", $group_id);
+        $db->execute();
+        $field_type_ids = $db->fetchAll(PDO::FETCH_COLUMN);
 
         $new_order = 1;
-        while ($row = mysql_fetch_assoc($query)) {
-            $field_type_id = $row["field_type_id"];
-            mysql_query("
-      UPDATE {PREFIX}field_types
-      SET    list_order = $new_order
-      WHERE  field_type_id = $field_type_id
-    ");
+        foreach ($field_type_ids as $field_type_id) {
+            $db->query("
+                UPDATE {PREFIX}field_types
+                SET    list_order = :list_order
+                WHERE  field_type_id = $field_type_id
+            ");
+            $db->bindAll(array(
+                "list_order" => $new_order,
+                "field_type_id" => $field_type_id
+            ));
+            $db->execute();
             $new_order++;
         }
     }
@@ -524,7 +563,7 @@ class FieldTypes
     }
 
 
-    function cf_update_shared_characteristics($info)
+    public static function updateSharedCharacteristics($info)
     {
         $group_strs = array();
         foreach ($info["all_group_names"] as $group_name) {
@@ -541,12 +580,12 @@ class FieldTypes
                 $settings[] = $info[$group_name][$i] . "," . $info["{$group_name}_settings"][$i];
             }
             $row_str .= "$group_name:" . implode("`", $settings);
-
             $group_strs[] = $row_str;
         }
 
         $str = implode("|", $group_strs);
-        ft_set_settings(array("field_type_settings_shared_characteristics" => $str));
+
+        Settings::set(array("field_type_settings_shared_characteristics" => $str));
 
         return array(true, "The shared characteristics have been updated.");
     }

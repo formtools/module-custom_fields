@@ -20,8 +20,7 @@ class Module extends FormToolsModule
     protected $nav = array(
         "module_name"                   => array("index.php", false),
         "phrase_shared_resources"       => array("shared_resources/", false),
-        "phrase_shared_characteristics" => array("shared_characteristics.php", false),
-        "word_license"                  => array("license.php", false)
+        "phrase_shared_characteristics" => array("shared_characteristics.php", false)
     );
 
     public function install($module_id)
