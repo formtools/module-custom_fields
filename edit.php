@@ -40,10 +40,6 @@ if (isset($request["page"]) && !empty($request["page"])) {
     $page = Modules::loadModuleField("custom_fields", "page", "page", "main");
 }
 
-$head_string = <<< END
-  <link type="text/css" rel="stylesheet" href="$root_url/modules/custom_fields/global/css/styles.css">
-END;
-
 $same_page = CoreGeneral::getCleanPhpSelf();
 $tabs = array(
     "main" => array(
@@ -84,6 +80,10 @@ $page_vars["show_tabset_nav_links"] = true;
 $page_vars["prev_tabset_link"] = $prev_tabset_link;
 $page_vars["next_tabset_link"] = $next_tabset_link;
 $page_vars["g_cf_allow_editing_of_non_editable_fields"] = $g_cf_allow_editing_of_non_editable_fields;
+
+// can be overridden in the individual tab pages
+$success = true;
+$message = "";
 
 // move this to separate include
 switch ($page) {

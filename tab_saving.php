@@ -1,18 +1,16 @@
 <?php
 
-if (isset($request["update"]))
-{
-	list($g_success, $g_message) = cf_update_server_tab($field_type_id, $request);
+use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules\CustomFields\FieldTypes;
+
+if (isset($request["update"])) {
+    list($success, $message) = FieldTypes::updateServerTab($field_type_id, $request, $L);
 }
-$field_type_info = ft_get_field_type($field_type_id);
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id);
 
-$head_string .=<<< END
-<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
-END;
-
-
-$page_vars["page"]            = $page;
-$page_vars["head_string"]     = $head_string;
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
+$page_vars["page"] = $page;
 $page_vars["field_type_info"] = $field_type_info;
 
-ft_display_module_page("templates/edit.tpl", $page_vars);
+$module->displayPage("templates/edit.tpl", $page_vars);

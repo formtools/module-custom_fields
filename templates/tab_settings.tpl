@@ -4,7 +4,7 @@
     {assign var=g_success value=true}
     {assign var=g_message value=$L.text_non_editable_field_type}
   {/if}
-  {include file="messages.tpl"}
+  {ft_include file="messages.tpl"}
 
   <form action="{$same_page}" method="post">
 

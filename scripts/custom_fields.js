@@ -34,7 +34,7 @@ cf_ns.add_setting_option = function() {
 cf_ns.create_new_group = function() {
   ft.dialog_activity_icon($("#add_group_popup"), "show");
   $.ajax({
-    url:      g.root_url + "/modules/custom_fields/global/code/actions.php",
+    url:      g.root_url + "/modules/custom_fields/code/actions.php",
     type:     "POST",
     dataType: "json",
     data:     { group_name: $("#add_group_popup").find(".new_group_name").val(), action: "create_new_group" },
@@ -118,7 +118,7 @@ cf_ns.delete_row = function(el) {
     open: function() {
       ft.dialog_activity_icon(this, "show");
       $.ajax({
-        url:      g.root_url + "/modules/custom_fields/global/code/actions.php",
+        url:      g.root_url + "/modules/custom_fields/code/actions.php",
         data:     { action: "get_field_type_usage", field_type_id: field_type_id },
         dataType: "json",
         success:  cf_ns.delete_custom_field_response,

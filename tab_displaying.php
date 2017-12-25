@@ -1,38 +1,48 @@
 <?php
 
-if (isset($request["update"]))
-{
-  list($g_success, $g_message) = cf_update_client_tab($field_type_id, $request);
+use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules;
+use FormTools\Modules\CustomFields\FieldTypes;
+use FormTools\Sessions;
+
+if (isset($request["update"])) {
+    list($success, $message) = FieldTypes::updateClientTab($field_type_id, $request, $L);
 }
 
-$field_type_info     = ft_get_field_type($field_type_id);
-$field_type_settings = ft_get_field_type_settings($field_type_id);
-$modules = ft_get_modules();
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id);
+$field_type_settings = CoreFieldTypes::getFieldTypeSettings($field_type_id);
+$modules = Modules::getList();
 
-
-$current_inner_tab = isset($_SESSION["ft"]["inner_tabs"]["custom_fields_edit_field_displaying"]) ?
-  $_SESSION["ft"]["inner_tabs"]["custom_fields_edit_field_displaying"] : "";
-
-$head_string .=<<< END
-<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
-END;
-
-$page_vars["page"]              = $page;
-$page_vars["head_string"]       = $head_string;
-$page_vars["modules"]           = $modules;
-$page_vars["current_inner_tab"] = $current_inner_tab;
-$page_vars["field_type_info"]   = $field_type_info;
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
+$page_vars["page"] = $page;
+$page_vars["modules"] = $modules;
+$page_vars["current_inner_tab"] = Sessions::getWithFallback("inner_tabs.custom_fields_edit_field_displaying", 1);
+$page_vars["field_type_info"] = $field_type_info;
 $page_vars["field_type_settings"] = $field_type_settings;
 $page_vars["head_js"] =<<< END
 $(function() {
-  ft.init_inner_tabs();
-  $("input[name=rendering_type]").bind("click", function() {
-    if (this.value == "smarty") {
-      $("#view_field_smarty_markup_section").show();
-    } else {
-      $("#view_field_smarty_markup_section").hide();
-    }
-  });
+    var onChangeTab = function (tabNum) {
+        if (tabNum === 1) {
+            view_field_smarty_markup_field.refresh();
+        } else if (tabNum === 2) {
+            edit_field_markup_field.refresh();
+        } else if (tabNum === 3) {
+            include_css_field.refresh();
+        } else if (tabNum === 4) {
+            include_js_field.refresh();
+        }
+    };
+    
+    ft.init_inner_tabs(onChangeTab);
+    $("input[name=rendering_type]").bind("click", function() {
+        if (this.value == "smarty") {
+            $("#view_field_smarty_markup_section").show();
+        } else {
+            $("#view_field_smarty_markup_section").hide();
+        }
+    });
 });
 END;
-ft_display_module_page("templates/edit.tpl", $page_vars);
+
+$module->displayPage("templates/edit.tpl", $page_vars);

@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\FieldTypes as CoreFieldTypes;
+
 $sortable_id = "list_settings";
 
 if (isset($request["update"])) {
@@ -9,19 +11,17 @@ if (isset($request["update"])) {
     }
 
     $request["sortable_id"] = $sortable_id;
-    list($g_success, $g_message) = update_field_type_setting_order($request);
+    list($success, $message) = update_field_type_setting_order($request);
 }
 
-$field_type_info = ft_get_field_type($field_type_id);
-$field_type_settings = ft_get_field_type_settings($field_type_id);
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id);
+$field_type_settings = CoreFieldTypes::getFieldTypeSettings($field_type_id);
 
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page"] = $page;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["field_type_info"] = $field_type_info;
 $page_vars["field_type_settings"] = $field_type_settings;
-$page_vars["head_string"] = <<< END
-  <script type="text/javascript" src="$g_root_url/global/scripts/sortable.js"></script>
-  <link type="text/css" rel="stylesheet" href="$g_root_url/modules/custom_fields/global/css/styles.css">
-END;
 
-ft_display_module_page("templates/edit.tpl", $page_vars);
+$module->displayPage("templates/edit.tpl", $page_vars);

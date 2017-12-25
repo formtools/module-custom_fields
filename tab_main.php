@@ -1,11 +1,10 @@
 <?php
 
 use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules\CustomFields\FieldTypes;
 
-$success = true;
-$message = "";
 if (isset($request["update"])) {
-    list($success, $message) = cf_update_main_tab($field_type_id, $request);
+    list($success, $message) = FieldTypes::updateMainTab($field_type_id, $request, $L);
 }
 
 $field_type_info = CoreFieldTypes::getFieldType($field_type_id, true);
@@ -15,7 +14,6 @@ $compatible_field_sizes = explode(",", $field_type_info["compatible_field_sizes"
 $page_vars["g_success"] = $success;
 $page_vars["g_message"] = $message;
 $page_vars["page"] = $page;
-$page_vars["head_string"] = $head_string;
 $page_vars["field_type_info"] = $field_type_info;
 $page_vars["field_type_groups"] = $field_type_groups;
 $page_vars["compatible_field_sizes"] = $compatible_field_sizes;

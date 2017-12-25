@@ -29,19 +29,6 @@ $page_vars = array(
     "sortable_id" => $sortable_id,
 );
 
-$page_vars["css_files"] = array(
-    "$root_url/global/codemirror/lib/codemirror.css",
-    "$root_url/modules/custom_fields/css/styles.css"
-);
-$page_vars["js_files"] = array(
-    "$root_url/global/codemirror/lib/codemirror.js",
-    "$root_url/global/scripts/sortable.js",
-    "$root_url/modules/custom_fields/scripts/custom_fields.js",
-    "$root_url/global/codemirror/mode/css/css.js",
-    "$root_url/global/codemirror/mode/javascript/javascript.js",
-    "$root_url/global/codemirror/mode/clike/clike.js"
-);
-
 $page_vars["edit_submission_shared_resources_js"] = $settings["edit_submission_shared_resources_js"];
 $page_vars["edit_submission_shared_resources_css"] = $settings["edit_submission_shared_resources_css"];
 $page_vars["edit_submission_onload_resources"] = explode("|", $settings["edit_submission_onload_resources"]);

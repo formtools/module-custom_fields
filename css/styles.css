@@ -155,7 +155,7 @@ table.var_list_table {
 }
 
 .sortable .rows .info {
-  background: transparent url(../../../../global/images/info_small.png) no-repeat center 2px;
+  background: transparent url(../../../global/images/info_small.png) no-repeat center 2px;
   cursor: pointer;
 }
 

@@ -5,13 +5,13 @@
     {assign var=g_message value=$L.text_non_editable_field_type}
   {/if}
 
-  {include file="messages.tpl"}
+  {ft_include file="messages.tpl"}
 
   <form action="{$same_page}" method="post">
 
     <div class="inner_tabset" id="custom_fields_edit_field_displaying">
       <div class="tab_row fourCols">
-        <div class="inner_tab1 {if $current_inner_tab == 1 || $current_inner_tab == ""}selected="selected"{/if}">{$L.phrase_view_field}</div>
+        <div class="inner_tab1 {if $current_inner_tab == 1}selected{/if}">{$L.phrase_view_field}</div>
         <div class="inner_tab2 {if $current_inner_tab == 2}selected{/if}">{$L.phrase_edit_field}</div>
         <div class="inner_tab3 {if $current_inner_tab == 3}selected{/if}">CSS</div>
         <div class="inner_tab4 {if $current_inner_tab == 4}selected{/if}">Javascript</div>
@@ -67,14 +67,18 @@
               <textarea id="view_field_smarty_markup" name="view_field_smarty_markup" style="height: 300px">{$field_type_info.view_field_smarty_markup|escape}</textarea>
             </div>
             <script type="text/javascript">
-              var view_field_smarty_markup_field = new CodeMirror.fromTextArea("view_field_smarty_markup", {literal}{{/literal}
-                parserfile: ["parsexml.js"],
-                path: "{$g_root_url}/global/codemirror/js/",
-                stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
-              {literal}});{/literal}
+              {literal}
+              var view_field_smarty_markup_field = new CodeMirror.fromTextArea(document.getElementById("view_field_smarty_markup"), {
+                mode: {
+                  name: "smarty",
+                  baseMode: "text/html",
+                  version: 3
+                }
+              });
+              {/literal}
             </script>
             {assign var="context" value="view"}
-            {include file="../../modules/custom_fields/templates/available_variables.tpl"}
+            {include file="./available_variables.tpl"}
         </div>
         </div>
         <div class="inner_tab_content2 {if $current_inner_tab != 2}hidden{/if}">
@@ -84,26 +88,26 @@
           <div class="editor">
             <textarea id="edit_field_smarty_markup" name="edit_field_smarty_markup" style="height: 300px">{$field_type_info.edit_field_smarty_markup|escape}</textarea>
           </div>
-          <script type="text/javascript">
-            var edit_field_markup_field = new CodeMirror.fromTextArea("edit_field_smarty_markup", {literal}{{/literal}
-              parserfile: ["parsexml.js"],
-              path: "{$g_root_url}/global/codemirror/js/",
-              stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+          <script>
+            var edit_field_markup_field = new CodeMirror.fromTextArea(document.getElementById("edit_field_smarty_markup"), {literal}{{/literal}
+              mode: {
+                name: "smarty",
+                baseMode: "text/html",
+                version: 3
+              }
             {literal}});{/literal}
           </script>
           {assign var="context" value="edit"}
-          {include file="../../modules/custom_fields/templates/available_variables.tpl"}
+          {include file="./available_variables.tpl"}
         </div>
         <div class="inner_tab_content3 {if $current_inner_tab != 3}hidden{/if}">
           <div class="hint margin_bottom_large">{$L.text_css_desc}</div>
           <div class="editor">
             <textarea id="resources_css" name="resources_css" style="height: 300px">{$field_type_info.resources_css}</textarea>
           </div>
-          <script type="text/javascript">
-            var include_css_field = new CodeMirror.fromTextArea("resources_css", {literal}{{/literal}
-              parserfile: ["parsecss.js"],
-              path: "{$g_root_url}/global/codemirror/js/",
-              stylesheet: "{$g_root_url}/global/codemirror/css/csscolors.css"
+          <script>
+            var include_css_field = new CodeMirror.fromTextArea(document.getElementById("resources_css"), {literal}{{/literal}
+              mode: "css"
             {literal}});{/literal}
           </script>
         </div>
@@ -113,10 +117,8 @@
             <textarea id="resources_js" name="resources_js" style="height: 300px">{$field_type_info.resources_js}</textarea>
           </div>
           <script type="text/javascript">
-            var include_js_field = new CodeMirror.fromTextArea("resources_js", {literal}{{/literal}
-              parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-              path: "{$g_root_url}/global/codemirror/js/",
-              stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+            var include_js_field = new CodeMirror.fromTextArea(document.getElementById("resources_js"), {literal}{{/literal}
+              mode: "js"
             {literal}});{/literal}
           </script>
         </div>

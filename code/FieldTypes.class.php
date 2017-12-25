@@ -260,6 +260,11 @@ class FieldTypes
             $list_order = $num_field_types + 1;
         }
 
+        $compatible_field_sizes = "";
+        if (isset($info["compatible_field_sizes"])) {
+            $compatible_field_sizes = implode(",", $info["compatible_field_sizes"]);
+        }
+
         $db->query("
             UPDATE {PREFIX}field_types
             SET    field_type_name = :field_type_name,
@@ -274,7 +279,7 @@ class FieldTypes
         ");
         $db->bindAll(array(
             "field_type_name" => $info["field_type_name"],
-            "compatible_field_sizes" => implode(",", $info["compatible_field_sizes"]),
+            "compatible_field_sizes" => $compatible_field_sizes,
             "group_id" => $group_id,
             "is_file_field" => $info["is_file_field"],
             "is_date_field" => $info["is_date_field"],
@@ -391,6 +396,7 @@ class FieldTypes
             "php_processing" => $info["php_processing"],
             "field_type_id" => $field_type_id
         ));
+        $db->execute();
 
         return array(true, $L["notify_custom_field_updated"]);
     }
@@ -513,7 +519,7 @@ class FieldTypes
             $db->query("
                 UPDATE {PREFIX}field_types
                 SET    list_order = :list_order
-                WHERE  field_type_id = $field_type_id
+                WHERE  field_type_id = :field_type_id
             ");
             $db->bindAll(array(
                 "list_order" => $new_order,

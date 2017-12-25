@@ -57,12 +57,6 @@ $page_vars = array(
     )
 );
 
-$page_vars["head_string"] = <<< END
-  <script src="$root_url/global/scripts/sortable.js"></script>
-  <script src="$root_url/modules/custom_fields/scripts/custom_fields.js"></script>
-  <link type="text/css" rel="stylesheet" href="$root_url/modules/custom_fields/css/styles.css">
-END;
-
 $page_vars["head_js"] = <<< END
 $(function() {
   $existing_field_type_identifiers_js
@@ -108,7 +102,7 @@ $(function() {
           ft.dialog_activity_icon(this, "show");
           ft.dialog_disable_button(this, $("<div />").html("{$L["phrase_add_field_type_rightarrow"]}").text());
           $.ajax({
-            url:  g.root_url + "/modules/custom_fields/global/code/actions.php",
+            url:  g.root_url + "/modules/custom_fields/code/actions.php",
             data: {
               action:                 "add_field",
               field_type_name:        field_type_name,
@@ -157,7 +151,7 @@ $(function() {
     });
 
     $.ajax({
-      url:      g.root_url + "/modules/custom_fields/global/code/actions.php",
+      url:      g.root_url + "/modules/custom_fields/code/actions.php",
       data:     { action: "get_undeletable_field_type_info", field_type_id: field_type_id },
       type:     "POST",
       dataType: "html",

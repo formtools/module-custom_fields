@@ -103,11 +103,10 @@ $page_vars = array(
     "head_title" => $L["phrase_shared_characteristics"],
     "grouped_characteristics" => $grouped_characteristics,
     "js_messages" => array("word_edit", "word_delete"),
-    "head_js" => $head_js
+    "head_js" => $head_js,
+    "css_files" => array(
+        "$root_url/modules/custom_fields/css/styles.css"
+    )
 );
-
-$page_vars["head_string"] = <<< END
-  <link type="text/css" rel="stylesheet" href="$root_url/modules/custom_fields/global/css/styles.css">
-END;
 
 $module->displayPage("templates/shared_characteristics.tpl", $page_vars);

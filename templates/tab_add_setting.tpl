@@ -2,7 +2,7 @@
     {assign var=g_success value=true}
     {assign var=g_message value=$L.text_non_editable_field_type}
   {/if}
-  {include file="messages.tpl"}
+  {ft_include file="messages.tpl"}
 
   <div class="subtitle underline margin_bottom_large">{$L.phrase_add_setting|upper}</div>
 

@@ -5,7 +5,7 @@
     {assign var=g_message value=$L.text_non_editable_field_type}
   {/if}
 
-  {include file="messages.tpl"}
+  {ft_include file="messages.tpl"}
 
   <form action="{$same_page}" method="post">
     <input type="hidden" name="field_type_id" value="{$field_type_info.field_type_id}" />
