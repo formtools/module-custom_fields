@@ -1,4 +1,4 @@
-## Custom Fields modules
+## Custom Fields module
 
 The Custom Fields module lets you customize and create those very field types that you see in your forms: textboxes, 
 textareas, etc. This is an incredibly powerful module. In the immortal words of Keanu Reeves: "Whoaahhh".
