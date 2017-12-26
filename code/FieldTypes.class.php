@@ -41,6 +41,7 @@ class FieldTypes
                 resources_js)
             VALUES (:is_editable, :field_type_name, :field_type_identifier, :group_id, :is_file_field, :is_date_field, 
                 :raw_field_type_map, :raw_field_type_map_multi_select_id, :list_order, :compatible_field_sizes,
+                :view_field_rendering_type, :view_field_php_function_source, :view_field_php_function, 
                 :view_field_smarty_markup, :edit_field_smarty_markup, :php_processing, :resources_css, :resources_js)
         ";
 

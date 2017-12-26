@@ -6,6 +6,7 @@ use FormTools\Core;
 use FormTools\FieldTypes as CoreFieldTypes;
 use FormTools\Modules;
 use FormTools\Settings;
+use FormTools\Modules\CustomFields\FieldTypes;
 
 $module = Modules::initModulePage("admin");
 $L = $module->getLangStrings();
@@ -14,7 +15,7 @@ $root_url = Core::getRootUrl();
 $success = true;
 $message = "";
 if (isset($_POST["update"])) {
-    list($success, $message) = cf_update_shared_characteristics($_POST);
+    list($success, $message) = FieldTypes::updateSharedCharacteristics($_POST);
 }
 
 $shared_characteristics = Settings::get("field_type_settings_shared_characteristics", "core");

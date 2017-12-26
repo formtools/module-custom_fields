@@ -18,7 +18,7 @@
       </td>
     </tr>
     <tr>
-      <td valign="top">{$LANG.word_identifier}</td>
+      <td valign="top">{$L.word_identifier}</td>
       <td>
         <input type="text" name="field_setting_identifier" value="" class="full_width" maxlength="50" />
         <div class="light_grey">{$L.text_field_setting_desc}</div>

@@ -40,7 +40,7 @@
                   <input type="hidden" class="sr_order" value="{$i.rule_id}" />
                   <ul>
                     <li class="col1 sort_col">{$i.list_order}</li>
-                    <li class="col2">{display_rsv_rule_name rule=$i.rsv_rule}</li>
+                    <li class="col2">{display_rsv_rule_name rule=$i.rsv_rule L=$L}</li>
                     <li class="col3">{eval var=$i.rule_label}</li>
                     <li class="col4">{eval var=$i.default_error_message|escape}</li>
                     <li class="col5 edit"><a href="?page=edit_validation_rule&field_type_id={$field_type_id}&rule_id={$i.rule_id}"></a></li>

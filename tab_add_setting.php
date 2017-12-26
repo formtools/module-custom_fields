@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules\CustomFields\FieldTypeSettings;
+
 $sortable_id = "field_type_setting_options";
 
 $page_vars["prev_tabset_link"] = (!empty($links["prev_field_type_id"])) ? "edit.php?page=settings&field_type_id={$links["prev_field_type_id"]}" : "";
@@ -7,20 +10,23 @@ $page_vars["next_tabset_link"] = (!empty($links["next_field_type_id"])) ? "edit.
 
 if (isset($request["add"])) {
     $request["sortable_id"] = $sortable_id;
-    list($g_success, $g_message) = cf_add_field_type_setting($field_type_id, $request);
-    if ($g_success) {
-        header("location: edit.php?page=edit_setting&setting_id=$g_message&new=1");
+    list($success, $message) = FieldTypeSettings::addFieldTypeSetting($field_type_id, $request, $L);
+    if ($success) {
+        header("location: edit.php?page=edit_setting&setting_id=$message&new=1");
         exit;
     }
 }
 
-$field_type_info = ft_get_field_type($field_type_id);
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id);
 
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page"] = $page;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["field_type_info"] = $field_type_info;
 $page_vars["js_messages"] = array(
-    "phrase_connect_rows", "phrase_disconnect_rows"
+    "phrase_connect_rows",
+    "phrase_disconnect_rows"
 );
 
 $page_vars["head_js"] = <<< END

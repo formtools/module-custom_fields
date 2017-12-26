@@ -1,17 +1,20 @@
 <?php
 
+use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules\CustomFields\Validation;
+
 $page_vars["prev_tabset_link"] = (!empty($links["prev_field_type_id"])) ? "edit.php?page=settings&field_type_id={$links["prev_field_type_id"]}" : "";
 $page_vars["next_tabset_link"] = (!empty($links["next_field_type_id"])) ? "edit.php?page=settings&field_type_id={$links["next_field_type_id"]}" : "";
 
 if (isset($request["add"])) {
-    list($g_success, $g_message) = cf_add_field_type_validation_rule($field_type_id, $request);
+    list($g_success, $g_message) = Validation::addFieldTypeValidationRule($field_type_id, $request, $L);
     if ($g_success) {
         header("location: edit.php?page=edit_validation_rule&rule_id=$g_message&new=1");
         exit;
     }
 }
 
-$field_type_info = ft_get_field_type($field_type_id, true);
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id, true);
 
 // to prevent the user defining multiple rules for the same RSV validation rule (which wouldn't make sense), figure out
 // what's already been created and pass them to the RSV dropdown, so they can't be selected

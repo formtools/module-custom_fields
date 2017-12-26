@@ -87,6 +87,7 @@ $L["phrase_select_setting_containing_option_list"] = "Select setting containing 
 $L["phrase_setting_name"] = "Setting Name";
 $L["phrase_included_files"] = "Included Files";
 $L["phrase_path_to_resource"] = "Path to Resource";
+$L["phrase_please_wait"] = "Please wait...";
 
 $L["notify_custom_field_updated"] = "The custom field information has been updated.";
 $L["notify_custom_fields_updated"] = "The custom fields have been updated.";

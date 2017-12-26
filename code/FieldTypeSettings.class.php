@@ -10,7 +10,8 @@ use PDO, Exception;
 class FieldTypeSettings
 {
     /**
-     * Adds a new field type.
+     * Adds a new field type. Looks like there's duplication here with the Core function with the same name in the
+     * FieldTypes class.
      *
      * @param integer $field_type_id
      * @param array $info

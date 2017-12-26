@@ -38,6 +38,7 @@ $(function() {
     $("input[name=rendering_type]").bind("click", function() {
         if (this.value == "smarty") {
             $("#view_field_smarty_markup_section").show();
+            view_field_smarty_markup_field.refresh();
         } else {
             $("#view_field_smarty_markup_section").hide();
         }

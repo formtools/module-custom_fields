@@ -3,8 +3,9 @@
 require_once("../../global/library.php");
 
 use FormTools\Core;
-use FormTools\FieldTypes;
+use FormTools\FieldTypes as CoreFieldTypes;
 use FormTools\Modules;
+use FormTools\Modules\CustomFields\FieldTypes;
 
 $module = Modules::initModulePage("admin");
 $root_url = Core::getRootUrl();
@@ -17,16 +18,16 @@ $success = true;
 $message = "";
 if (isset($request["update_page"])) {
     $request["sortable_id"] = $sortable_id;
-    list($success, $message) = cf_update_custom_fields($request);
+    list($success, $message) = FieldTypes::updateCustomFields($request, $L);
 
     // if the user just deleted a custom field, override the default update message
     if (!empty($request["delete_field_type"])) {
-        list($success, $message) = cf_delete_field_type($request["delete_field_type"]);
+        list($success, $message) = FieldTypes::deleteFieldType($request["delete_field_type"], $L);
     }
 }
 
-$grouped_field_types = FieldTypes::getGroupedFieldTypes();
-$id_to_identifier = FieldTypes::getFieldTypeIdToIdentifierMap();
+$grouped_field_types = CoreFieldTypes::getGroupedFieldTypes();
+$id_to_identifier = CoreFieldTypes::getFieldTypeIdToIdentifierMap();
 
 $identifiers = array();
 foreach (array_values($id_to_identifier) as $identifier) {
@@ -35,9 +36,11 @@ foreach (array_values($id_to_identifier) as $identifier) {
 $existing_field_type_identifiers_js = "existing_field_type_identifiers = [" . implode(",", $identifiers) . "];";
 
 $page_vars = array(
+    "g_success" => $success,
+    "g_message" => $message,
     "grouped_field_types" => $grouped_field_types,
     "sortable_id" => $sortable_id,
-    "field_type_groups" => FieldTypes::getFieldTypeGroups(),
+    "field_type_groups" => CoreFieldTypes::getFieldTypeGroups(),
     "js_messages" => array(
         "word_cancel",
         "word_edit",
@@ -53,6 +56,7 @@ $page_vars = array(
     "module_js_messages" => array(
         "phrase_delete_field_type",
         "confirm_delete_field_type",
+        "confirm_delete_field_type_in_use",
         "notify_cannot_delete_nonempty_group"
     )
 );

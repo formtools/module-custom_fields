@@ -20,13 +20,16 @@ h2 {
   width: 100%;
   height: 200px;
 }
+body .editor .CodeMirror {
+    max-height: 200px;
+}
 .edit_custom_fields .col2 {
   width: 180px;
   padding-left: 3px;
 }
 .edit_custom_fields .header_row .col2 {
   width: 183px;
-  padding-left: 0px;
+  padding-left: 0;
 }
 .edit_custom_fields .col3 {
   width: 150px;

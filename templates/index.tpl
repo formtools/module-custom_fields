@@ -175,7 +175,7 @@
   </div>
 
   <div id="delete_group_popup" class="hidden">
-    {$LANG.phrase_please_wait}
+    {$L.phrase_please_wait}
   </div>
 
 {ft_include file='modules_footer.tpl'}

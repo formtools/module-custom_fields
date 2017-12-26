@@ -20,7 +20,7 @@ class Validation
     }
 
 
-    public static function cf_update_validation_rule($rule_id, $info, $L)
+    public static function updateValidationRule($rule_id, $info, $L)
     {
         $db = Core::$db;
 
@@ -133,7 +133,7 @@ class Validation
         foreach ($sortable_rows as $rule_id) {
             $db->query("
                 UPDATE {PREFIX}field_type_validation_rules
-                SET    list_order = :new_order
+                SET    list_order = :list_order
                 WHERE  rule_id = :rule_id
                 LIMIT 1
             ");

@@ -139,10 +139,10 @@ cf_ns.delete_custom_field_response = function(data) {
 
   ft.dialog_activity_icon($("#delete_group_popup"), "hide");
   var message = "";
-  if (typeof data.length != "number") {
-    message = g.messages["confirm_delete_field_type"];
-  } else {
+  if (data.length > 0) {
     message = g.messages["confirm_delete_field_type_in_use"];
+  } else {
+    message = g.messages["confirm_delete_field_type"];
   }
 
   var html = "<table cellspacing=\"0\" cellpadding=\"0\">"

@@ -13,7 +13,7 @@
     <table cellspacing="1" cellpadding="1" border="0">
     <tr>
       <td width="150">{$LANG.phrase_validation_rule}</td>
-      <td>{rsv_rules name_id="rsv_rule" omit=$existing_validation_rules}</td>
+      <td>{rsv_rules name_id="rsv_rule" omit=$existing_validation_rules L=$L}</td>
     </tr>
     <tr>
       <td valign="top">{$L.word_label}</td>
@@ -55,7 +55,7 @@
       <tr>
         <td width="150" valign="top">{$L.phrase_field_name}</td>
         <td>
-          <input type="text" name="rsv_field_name" value="{$rule.rsv_field_name|escape}" maxlength="255" class="full_width" />
+          <input type="text" name="rsv_field_name" value="" maxlength="255" class="full_width" />
           <div class="light_grey">{$L.text_rsv_field_name_desc}</div>
         </td>
       </tr>

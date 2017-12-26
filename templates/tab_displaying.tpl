@@ -103,7 +103,7 @@
         <div class="inner_tab_content3 {if $current_inner_tab != 3}hidden{/if}">
           <div class="hint margin_bottom_large">{$L.text_css_desc}</div>
           <div class="editor">
-            <textarea id="resources_css" name="resources_css" style="height: 300px">{$field_type_info.resources_css}</textarea>
+            <textarea id="resources_css" name="resources_css" style="height: 400px">{$field_type_info.resources_css}</textarea>
           </div>
           <script>
             var include_css_field = new CodeMirror.fromTextArea(document.getElementById("resources_css"), {literal}{{/literal}
@@ -114,11 +114,11 @@
         <div class="inner_tab_content4 {if $current_inner_tab != 4}hidden{/if}">
           <div class="hint margin_bottom_large">{$L.text_js_desc}</div>
           <div class="editor">
-            <textarea id="resources_js" name="resources_js" style="height: 300px">{$field_type_info.resources_js}</textarea>
+            <textarea id="resources_js" name="resources_js" style="height: 400px">{$field_type_info.resources_js}</textarea>
           </div>
           <script type="text/javascript">
             var include_js_field = new CodeMirror.fromTextArea(document.getElementById("resources_js"), {literal}{{/literal}
-              mode: "js"
+              mode: "javascript"
             {literal}});{/literal}
           </script>
         </div>

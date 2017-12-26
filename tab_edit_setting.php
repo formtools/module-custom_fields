@@ -2,6 +2,7 @@
 
 use FormTools\FieldTypes as CoreFieldTypes;
 use FormTools\Modules;
+use FormTools\Modules\CustomFields\FieldTypeSettings;
 
 $sortable_id = "field_type_setting_options";
 $setting_id = Modules::loadModuleField("custom_fields", "setting_id", "setting_id");
@@ -17,7 +18,7 @@ if (isset($_GET["new"])) {
 if (isset($request["update"])) {
     $request["field_type_id"] = $field_type_id;
     $request["sortable_id"] = $sortable_id;
-    list($success, $message) = cf_update_field_type_setting($setting_id, $request);
+    list($success, $message) = FieldTypeSettings::updateFieldTypeSetting($setting_id, $request, $L);
 }
 
 $field_type_info = CoreFieldTypes::getFieldType($field_type_id);

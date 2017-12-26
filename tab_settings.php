@@ -1,17 +1,18 @@
 <?php
 
 use FormTools\FieldTypes as CoreFieldTypes;
+use FormTools\Modules\CustomFields\FieldTypeSettings;
 
 $sortable_id = "list_settings";
 
 if (isset($request["update"])) {
     // bit kludgy. This function deletes the appropriate rows, but the following function handles the message
     if (isset($request["{$sortable_id}_sortable__deleted_rows"])) {
-        cf_delete_field_type_settings($request["field_type_id"], $request["{$sortable_id}_sortable__deleted_rows"]);
+        FieldTypeSettings::deleteFieldTypeSettings($request["{$sortable_id}_sortable__deleted_rows"]);
     }
 
     $request["sortable_id"] = $sortable_id;
-    list($success, $message) = update_field_type_setting_order($request);
+    list($success, $message) = FieldTypeSettings::updateFieldTypeSettingOrder($request, $L);
 }
 
 $field_type_info = CoreFieldTypes::getFieldType($field_type_id);

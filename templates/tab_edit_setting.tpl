@@ -19,7 +19,7 @@
       <td><input type="text" name="field_label" id="field_label" class="full_width" value="{$field_type_setting.field_label|escape}" /></td>
     </tr>
     <tr>
-      <td>{$LANG.word_identifier}</td>
+      <td>{$L.word_identifier}</td>
       <td class="light_grey">{$field_type_setting.field_setting_identifier}</td>
     </tr>
     <tr>
@@ -127,7 +127,11 @@
                   </li>
                   {/if}
                  <li class="sortable_row">
-                   {assign var=next_item_is_new_sort_group value=$field_type_setting.options[$smarty.foreach.row.iteration].is_new_sort_group}
+                   {if $smarty.foreach.row.last}
+                     {assign var=next_item_is_new_sort_group value="yes"}
+                   {else}
+                       {assign var=next_item_is_new_sort_group value=$field_type_setting.options[$smarty.foreach.row.iteration].is_new_sort_group}
+                   {/if}
                    <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
                 {/if}
 
