@@ -8,7 +8,8 @@ $sortable_id = "list_settings";
 if (isset($request["update"])) {
     // bit kludgy. This function deletes the appropriate rows, but the following function handles the message
     if (isset($request["{$sortable_id}_sortable__deleted_rows"])) {
-        FieldTypeSettings::deleteFieldTypeSettings($request["{$sortable_id}_sortable__deleted_rows"]);
+        $setting_ids = explode(",", $request["{$sortable_id}_sortable__deleted_rows"]);
+        FieldTypeSettings::deleteFieldTypeSettings($setting_ids);
     }
 
     $request["sortable_id"] = $sortable_id;

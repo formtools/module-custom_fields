@@ -207,39 +207,6 @@ class FieldTypeSettings
     }
 
 
-    /**
-     * Deletes a field type setting. It also updates all existing form fields that were referencing
-     * this setting to remove the dependant data.
-     *
-     * @param integer $field_type_id
-     * @param string $setting_id_list comma delimited list of setting IDs
-     */
-    public static function deleteFieldTypeSettings($setting_id_list)
-    {
-        $db = Core::$db;
-
-        $setting_ids = explode(",", $setting_id_list);
-
-        foreach ($setting_ids as $setting_id) {
-            if (empty($setting_id) || !is_numeric($setting_id)) {
-                continue;
-            }
-
-            $db->query("DELETE FROM {PREFIX}field_settings WHERE setting_id = :setting_id");
-            $db->bind("setting_id", $setting_id);
-            $db->execute();
-
-            $db->query("DELETE FROM {PREFIX}field_type_settings WHERE setting_id = :setting_id");
-            $db->bind("setting_id", $setting_id);
-            $db->execute();
-
-            $db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id = :setting_id");
-            $db->bind("setting_id", $setting_id);
-            $db->execute();
-        }
-    }
-
-
     public static function getNumFieldTypeSettings($field_type_id)
     {
         $db = Core::$db;
