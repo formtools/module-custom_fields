@@ -88,6 +88,7 @@ $L["phrase_setting_name"] = "Setting Name";
 $L["phrase_included_files"] = "Included Files";
 $L["phrase_path_to_resource"] = "Path to Resource";
 $L["phrase_please_wait"] = "Please wait...";
+$L["phrase_warning_disabling_fields"] = "Warning! Disabling fields";
 
 $L["notify_custom_field_updated"] = "The custom field information has been updated.";
 $L["notify_custom_fields_updated"] = "The custom fields have been updated.";
@@ -132,6 +133,7 @@ $L["text_field_size_desc"] = "This prevents the user from selecting a field size
 $L["text_raw_field_type_desc"] = "This is used to map your fields to \"real\" form field types, so that you can select this field type during the Add Form process for External forms.";
 $L["text_saving_desc"] = "Form Tools automatically saves the value from all field types with what's stored in the name=\"{\$NAME}\" field. But if you need to do something special - like combine the content from multiple fields - this is where you'd do it. The PHP entered here <b>must</b> define a \$value variable containing the content to store.";
 $L["text_settings_tab_desc"] = "This section lets you define customizable settings for your field type. These will appear to the administrator whenever they edit a form field of this type. The values from these settings may be used in the Displaying and Saving tab fields to customize the generated markup, or to determine how the field is saved.";
+$L["text_disabling_field_type_warning"] = "You have disabled one or more field types. Please note that when you disable a field type, it will no longer be available for use in any of your forms, and any existing usages of that field type will be reset to textboxes.";
 
 $L["confirm_delete_field_type"] = "Are you sure you want to delete this field type? Any fields currently associated with this field type will be reset and assigned to a plain textbox.";
 $L["confirm_delete_field_type_in_use"] = "This field type is currently in use. Deleting it will reset all of those fields to a textbox. Are you sure you want to do this?";

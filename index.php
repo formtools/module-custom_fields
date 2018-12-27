@@ -17,48 +17,66 @@ $sortable_id = "custom_fields";
 $success = true;
 $message = "";
 if (isset($request["update_page"])) {
-    $request["sortable_id"] = $sortable_id;
-    list($success, $message) = FieldTypes::updateCustomFields($request, $L);
+	$request["sortable_id"] = $sortable_id;
+	list($success, $message) = FieldTypes::updateCustomFields($request, $L);
 
-    // if the user just deleted a custom field, override the default update message
-    if (!empty($request["delete_field_type"])) {
-        list($success, $message) = FieldTypes::deleteFieldType($request["delete_field_type"], $L);
-    }
+	// if the user just disabled some field types, reset all usages of them to textboxes
+	if (!empty($request["disabled_field_types"])) {
+		$field_type_ids = explode(",", $request["disabled_field_types"]);
+		foreach ($field_type_ids as $id) {
+			FieldTypes::resetFieldTypeUsagesToTextboxes($id);
+		}
+	}
+
+	// if the user just deleted a custom field, override the default update message
+	if (!empty($request["delete_field_type"])) {
+		list($success, $message) = FieldTypes::deleteFieldType($request["delete_field_type"], $L);
+	}
 }
 
-$grouped_field_types = CoreFieldTypes::getGroupedFieldTypes();
+$grouped_field_types = CoreFieldTypes::getGroupedFieldTypes(false);
 $id_to_identifier = CoreFieldTypes::getFieldTypeIdToIdentifierMap();
+
+$enabled_field_type_ids = array();
+foreach ($grouped_field_types as $group) {
+	foreach ($group["field_types"] as $field_type) {
+		if ($field_type["is_enabled"] === "yes") {
+			$enabled_field_type_ids[] = $field_type["field_type_id"];
+		}
+	}
+}
+$enabled_field_type_ids_str = implode(", ", $enabled_field_type_ids);
 
 $identifiers = array();
 foreach (array_values($id_to_identifier) as $identifier) {
-    $identifiers[] = "'$identifier'";
+	$identifiers[] = "'$identifier'";
 }
 $existing_field_type_identifiers_js = "existing_field_type_identifiers = [" . implode(",", $identifiers) . "];";
 
 $page_vars = array(
-    "g_success" => $success,
-    "g_message" => $message,
-    "grouped_field_types" => $grouped_field_types,
-    "sortable_id" => $sortable_id,
-    "field_type_groups" => CoreFieldTypes::getFieldTypeGroups(),
-    "js_messages" => array(
-        "word_cancel",
-        "word_edit",
-        "phrase_create_group",
-        "word_yes",
-        "word_no",
-        "phrase_please_confirm",
-        "confirm_delete_group",
-        "word_error",
-        "word_okay",
-        "phrase_delete_field_type"
-    ),
-    "module_js_messages" => array(
-        "phrase_delete_field_type",
-        "confirm_delete_field_type",
-        "confirm_delete_field_type_in_use",
-        "notify_cannot_delete_nonempty_group"
-    )
+	"g_success" => $success,
+	"g_message" => $message,
+	"grouped_field_types" => $grouped_field_types,
+	"sortable_id" => $sortable_id,
+	"field_type_groups" => CoreFieldTypes::getFieldTypeGroups(),
+	"js_messages" => array(
+		"word_cancel",
+		"word_edit",
+		"phrase_create_group",
+		"word_yes",
+		"word_no",
+		"phrase_please_confirm",
+		"confirm_delete_group",
+		"word_error",
+		"word_okay",
+		"phrase_delete_field_type"
+	),
+	"module_js_messages" => array(
+		"phrase_delete_field_type",
+		"confirm_delete_field_type",
+		"confirm_delete_field_type_in_use",
+		"notify_cannot_delete_nonempty_group"
+	)
 );
 
 $page_vars["head_js"] = <<< END
@@ -164,6 +182,52 @@ $(function() {
       }
     });
   });
+  
+  // if the user disabled any field types, alert them to notify any usages of those fields will be set to textfields. 
+  // This prevents anything getting out of whack with the system
+  var allow_submit_override = false;
+  $("#custom_fields_form").bind("submit", function () {
+  	var originally_enabled_field_type_ids = [$enabled_field_type_ids_str];
+  	
+  	var selected = [];
+  	$("input[name='enabled_field_types[]']:checked").each(function (index, item) {
+  		selected.push(parseInt(item.value, 10));
+	});
+  	
+	var newly_disabled_items = [];
+	for (var i=0; i<originally_enabled_field_type_ids.length; i++) {
+		if (selected.indexOf(originally_enabled_field_type_ids[i]) === -1) {
+			newly_disabled_items.push(originally_enabled_field_type_ids[i]);
+		}
+	}
+	
+	if (newly_disabled_items.length > 0 && !allow_submit_override) {
+		ft.create_dialog({
+			dialog:     field_type_info_dialog,
+			title:      "{$L["phrase_warning_disabling_fields"]}",
+			popup_type: "warning",
+			min_width:  400,
+			content: "{$L["text_disabling_field_type_warning"]}",
+			buttons: [{
+				text: "{$LANG["word_continue"]}",
+				click: function() {
+					$("#disabled_field_types").val(newly_disabled_items.join(','));
+					allow_submit_override = true;
+					$("#custom_fields_form").submit();
+				}
+			}, {
+				text: "{$LANG["word_cancel"]}",
+				click: function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+		return false;
+	} else {
+		return true;
+	}
+  });
+  
 });
 END;
 
