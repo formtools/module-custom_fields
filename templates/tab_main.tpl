@@ -95,9 +95,13 @@
         </tr>
     </table>
 
-    {if $field_type_info.is_editable == "yes" || $g_cf_allow_editing_of_non_editable_fields}
-        <div>
+    <div>
+        {if $show_reset_button}
+            <input type="submit" name="reset_field_type"" value="{$L.phrase_reset_field_type}"/>
+        {/if}
+
+        {if $field_type_info.is_editable == "yes" || $g_cf_allow_editing_of_non_editable_fields}
             <input type="submit" name="update" value="{$LANG.word_update}"/>
-        </div>
-    {/if}
+        {/if}
+    </div>
 </form>

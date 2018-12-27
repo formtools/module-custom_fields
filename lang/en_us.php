@@ -89,6 +89,7 @@ $L["phrase_included_files"] = "Included Files";
 $L["phrase_path_to_resource"] = "Path to Resource";
 $L["phrase_please_wait"] = "Please wait...";
 $L["phrase_warning_disabling_fields"] = "Warning! Disabling fields";
+$L["phrase_reset_field_type"] = "Reset field type";
 
 $L["notify_custom_field_updated"] = "The custom field information has been updated.";
 $L["notify_custom_fields_updated"] = "The custom fields have been updated.";

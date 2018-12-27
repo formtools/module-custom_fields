@@ -7,12 +7,24 @@ if (isset($request["update"])) {
     list($success, $message) = FieldTypes::updateMainTab($field_type_id, $request, $L);
 }
 
+if (isset($request["reset_field_type"])) {
+
+	// TODO
+	//list($success, $message) = FieldTypes::updateMainTab($field_type_id, $request, $L);
+}
+
 $field_type_info = CoreFieldTypes::getFieldType($field_type_id, true);
 $field_type_groups = CoreFieldTypes::getFieldTypeGroups();
 $compatible_field_sizes = explode(",", $field_type_info["compatible_field_sizes"]);
 
+$show_reset_button = in_array($field_type_info["field_type_identifier"], array(
+	"textbox", "textarea", "password", "dropdown", "multi_select_dropdown", "radio_buttons", "checkboxes",
+	"date", "time", "phone", "code_markup"
+));
+
 $page_vars["g_success"] = $success;
 $page_vars["g_message"] = $message;
+$page_vars["show_reset_button"] = $show_reset_button;
 $page_vars["page"] = $page;
 $page_vars["field_type_info"] = $field_type_info;
 $page_vars["field_type_groups"] = $field_type_groups;
