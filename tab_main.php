@@ -7,13 +7,14 @@ if (isset($request["update"])) {
     list($success, $message) = FieldTypes::updateMainTab($field_type_id, $request, $L);
 }
 
-if (isset($request["reset_field_type"])) {
+$field_type_info = CoreFieldTypes::getFieldType($field_type_id, true);
 
-	// TODO
-	//list($success, $message) = FieldTypes::updateMainTab($field_type_id, $request, $L);
+if (isset($request["reset_field_type"])) {
+	CoreFieldTypes::resetFieldTypeByIdentifier($field_type_info["field_type_identifier"]);
+	$success = true;
+	$message = $L["notify_field_type_reset"];
 }
 
-$field_type_info = CoreFieldTypes::getFieldType($field_type_id, true);
 $field_type_groups = CoreFieldTypes::getFieldTypeGroups();
 $compatible_field_sizes = explode(",", $field_type_info["compatible_field_sizes"]);
 

@@ -109,6 +109,7 @@ $L["notify_validation_rule_updated"] = "The validation rule has been updated.";
 $L["notify_validation_rule_not_updated"] = "The validation rule could not be been updated.";
 $L["notify_cannot_delete_nonempty_group"] = "Sorry, you can't delete a non-empty group. Please delete or move all field types to another group before deleting this group.";
 $L["notify_no_field_type_settings"] = "There are no settings defined for this field type.";
+$L["notify_field_type_reset"] = "The field type has been reset to the default settings.";
 
 $L["text_module_intro"] = "This page lists all field types that may be used in your forms. You may reorder the groups and field types by dragging them to a new location.";
 $L["text_shared_resources_intro"] = "This page lets you define resources to be included on all Edit Submission pages. The first two tabs let you enter CSS and JS; the third tab lets you point to resources on your server to be included on page load.";

@@ -118,7 +118,6 @@ class FieldTypeSettings
 		}
 
 		try {
-
 			$db->query("
                 UPDATE {PREFIX}field_type_settings
                 SET    field_label = :field_label,
